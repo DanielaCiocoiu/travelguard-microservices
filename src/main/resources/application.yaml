@@ -1,0 +1,34 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: "true"
+spring:
+  jpa:
+    open-in-view: "false"
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: "true"
+    generate-ddl: "true"
+    hibernate:
+      globally_quoted_identifiers: true
+      globally_quoted_identifiers_skip_column_definitions: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      show-sql: "true"
+      ddl-auto: update
+    h2: null
+    console:
+      enabled: "true"
+  datasource:
+    username: sa
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    password: sa
+logging:
+  level:
+    org:
+      springframework: info
+    web: debug
