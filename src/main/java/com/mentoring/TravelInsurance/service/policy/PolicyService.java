@@ -9,13 +9,14 @@ import java.util.Optional;
 
 public interface PolicyService {
 
-    public List<Policy> findAll();
+    List<Policy> findAll();
 
-    public List<Policy> findAllByValidity();
+    List<Policy> findAllByValidity();
 
-    public Map<Type, Long> findAllByType();
-    public Optional<Policy> findById(int theId);
+    Map<Type, Long> findAllByType();
+    Optional<Policy> findById(int theId);
 
-    public Policy save(Policy policy);
-    public void deleteById(int theid);
+    Policy save(Policy policy);
+    void deleteById(int theid);
+    List<Policy> findPolicyByPriceBefore(double limit);
 }

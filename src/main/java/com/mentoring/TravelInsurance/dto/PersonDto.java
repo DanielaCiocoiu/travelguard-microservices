@@ -12,12 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PersonDto {
 
-
     private int id;
-
     private String name;
-
     private Integer age;
-
     private List<PolicyDto> policy;
 }

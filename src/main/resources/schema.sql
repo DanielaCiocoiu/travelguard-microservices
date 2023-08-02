@@ -15,6 +15,7 @@ CREATE TABLE persons (
   id int NOT NULL  AUTO_INCREMENT,
   name varchar(60) NOT NULL,
   age int NOT NULL,
-  id_policy varchar ,
+    nationality varchar(60) NOT NULL,
+  id_policy varchar,
   PRIMARY KEY (id));
 

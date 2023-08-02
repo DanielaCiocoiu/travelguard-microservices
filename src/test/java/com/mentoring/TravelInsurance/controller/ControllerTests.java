@@ -23,8 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,6 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -66,9 +63,9 @@ public class ControllerTests {
     @BeforeAll
     static void initBeforeAll() {
         policyOb = Setup.policyBuilder(2,true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK,160.00);
-        person = Person.builder().name("Maria").age(22).policy(List.of(policyOb)).build();
-        person1 = Person.builder().name("Mincu Ion").age(30).policy(List.of(policyOb)).build();
-        person2 = Person.builder().name("Vlad Minculescu").age(25).policy(List.of(policyOb)).build();
+        person = Person.builder().name("Maria").age(22).nationality("romana").policy(List.of(policyOb)).build();
+        person1 = Person.builder().name("Mincu Ion").age(30).nationality("americana").policy(List.of(policyOb)).build();
+        person2 = Person.builder().name("Vlad Minculescu").age(25).nationality("franceza").policy(List.of(policyOb)).build();
     }
 
     @BeforeEach
@@ -103,7 +100,7 @@ public class ControllerTests {
 
     @Test
     public void listPersonById_whenGetMethod() throws Exception {
-        Person person = Setup.personBuilder("Ana Maria", 20);
+        Person person = Setup.personBuilder("Ana Maria", 20, "romana");
         person.setId(1);
 
         personDto = personMapper.toDto(person);

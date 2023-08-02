@@ -2,12 +2,10 @@ package com.mentoring.TravelInsurance.service.policy;
 
 import com.mentoring.TravelInsurance.dao.PolicyRepository;
 import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
-import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -66,7 +64,6 @@ public class PolicyServiceIml implements PolicyService {
 
     @Override
     public Policy save(Policy policy) {
-
         policyRepository.save(policy);
         return policy;
     }
@@ -74,6 +71,11 @@ public class PolicyServiceIml implements PolicyService {
     @Override
     public void deleteById(int policyId) {
         policyRepository.deleteById(policyId);
+    }
+
+    @Override
+    public List<Policy> findPolicyByPriceBefore(double limit) {
+       return policyRepository.findPolicyByPriceBefore(limit);
     }
 
 }

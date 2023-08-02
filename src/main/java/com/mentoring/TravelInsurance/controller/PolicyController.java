@@ -1,10 +1,8 @@
 package com.mentoring.TravelInsurance.controller;
 
-import com.mentoring.TravelInsurance.dto.PersonDto;
 import com.mentoring.TravelInsurance.dto.PolicyDto;
 import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.mappers.PolicyMapper;
-import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
 import com.mentoring.TravelInsurance.service.policy.PolicyService;
@@ -31,6 +29,12 @@ public class PolicyController {
     public PolicyController(PolicyService policyService, PolicyMapper policyMapper) {
         this.policyService = policyService;
         this.policyMapper = policyMapper;
+    }
+
+    //http://localhost:8080/api/policies/price/50.0
+    @GetMapping("/policies/price/{price}")
+    public List<Policy> findPolicyByPriceBefore(@PathVariable double price) {
+        return policyService.findPolicyByPriceBefore(price);
     }
 
     //http://localhost:8080/api/policies

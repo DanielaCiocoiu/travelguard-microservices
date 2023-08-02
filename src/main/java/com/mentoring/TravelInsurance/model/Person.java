@@ -35,6 +35,9 @@ public class Person {
     @Column(name = "age")
     private Integer age;
 
+    @Column(name = "nationality")
+    private String nationality;
+
     @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "id")
     @JsonIgnore

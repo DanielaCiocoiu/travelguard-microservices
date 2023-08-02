@@ -9,6 +9,9 @@ import com.mentoring.TravelInsurance.service.person.PersonService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +25,6 @@ public class PersonController {
     private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
     private PersonService personService;
     private PersonMapper personMapper;
-
 
     public PersonController(PersonService personService, PersonMapper personMapper) {
         this.personService = personService;
@@ -55,7 +57,7 @@ public class PersonController {
         Person personSaved = personService.save(personToBeSaved);
         logger.info("Created new person {}", personSaved);
         logger.debug("Created new person {}", personSaved);
-        if (personDto.getAge() < 0){
+        if (personDto.getAge() < 0) {
             throw new PersonWrongAgeException("Wrong age for person: " + personDto.getId());
         }
         return personMapper.toDto(personSaved);
@@ -73,7 +75,7 @@ public class PersonController {
 
     @DeleteMapping("/person/{id}")
     public ResponseEntity<String> deleteById(@PathVariable(value = "id") int id) {
-        PersonDto personDto  = personMapper.toDto(personService.findById(id).get());
+        PersonDto personDto = personMapper.toDto(personService.findById(id).get());
         personService.deleteById(personDto.getId());
         logger.info("Deleted person with id: + " + id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -96,5 +98,24 @@ public class PersonController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/persons/sort")
+    public Iterable<Person> getPersonsSortedAlfabetically() {
+        return personService.getPersonsSortedAlfabetically(Sort.by("name").ascending());
+    }
+
+    //http://localhost:8080/api/persons/page?page=0&size=2
+    @GetMapping("/persons/page")
+    public Iterable<Person> getPersonsInPages(@RequestParam int page, @RequestParam int size) {
+        return personService.getPersonsInPages(PageRequest.of(page, size));
+    }
+
+    //http://localhost:8080/api/nationality/romana?page=0&size=2
+    @GetMapping("/nationality/{nationality}")
+    public List<Person> findPersonsByNationality(@PathVariable String nationality, @RequestParam int page, @RequestParam int size) {
+        final Sort sort = Sort.by("name").ascending();
+        final Pageable pageable = PageRequest.of(page, size, sort);
+        return personService.findPersonsByNationality(nationality, pageable);
     }
 }
