@@ -62,9 +62,7 @@ public class PersonAppTests {
     @Order(3)
     public void getAllPersons() {
         personList = personService.findAll();
-        personList.forEach((person -> {
-            logger.info("person id: " + person.getId());
-        }));
+        personList.forEach((person -> logger.info("person id: " + person.getId())));
         assertEquals(15, personList.size());
     }
     @Test

@@ -48,11 +48,11 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(name, person.name) && Objects.equals(age, person.age) && Objects.equals(policy, person.policy);
+        return Objects.equals(name, person.name) && Objects.equals(age, person.age) && Objects.equals(nationality, person.nationality) && Objects.equals(policy, person.policy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, age, policy);
+        return Objects.hash(name, age, nationality, policy);
     }
 }

@@ -10,5 +10,4 @@ import java.util.List;
 public interface PolicyRepository extends JpaRepository<Policy, Integer> {
     @Query("SELECT p from Policy p WHERE p.price<:limit")
     List<Policy> findPolicyByPriceBefore(double limit);
-
 }

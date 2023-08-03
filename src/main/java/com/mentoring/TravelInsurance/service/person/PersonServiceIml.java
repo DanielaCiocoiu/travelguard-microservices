@@ -14,19 +14,21 @@ import java.util.Optional;
 @Service
 public class PersonServiceIml implements PersonService {
 
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
     private PersonService personService;
 
     @Autowired
     public PersonServiceIml(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
+
     @Override
-    public Iterable<Person> getPersonsSortedAlfabetically(Sort sort){
+    public Iterable<Person> getPersonsSortedAlphabetically(Sort sort) {
         return personRepository.findAll(sort);
     }
+
     @Override
-    public Iterable<Person> getPersonsInPages(Pageable pageable){
+    public Iterable<Person> getPersonsInPages(Pageable pageable) {
         return personRepository.findAll(pageable).getContent();
     }
 
@@ -43,14 +45,14 @@ public class PersonServiceIml implements PersonService {
     @Override
     public Optional<Person> findById(int theId) {
         Optional<Person> result = personRepository.findById(theId);
-        Person person = null;
         if (result.isPresent()) {
-            person = result.get();
+            result.get();
         } else {
             throw new PersonNotFoundException("Person id not found - " + theId);
         }
         return result;
     }
+
     @Override
     public Person save(Person person) {
         personRepository.save(person);

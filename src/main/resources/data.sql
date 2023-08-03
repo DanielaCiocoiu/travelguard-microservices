@@ -10,16 +10,16 @@ INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,T
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'HAZARDOUS_WORK', 150);
 
 
-INSERT INTO persons( name,age,nationality, id_policy) VALUES('Ana Ion',23, 'romana', 1);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Vasile Milea',85, 'francez',2);
+INSERT INTO persons( name,age,nationality, id_policy) VALUES('Ana Ion',23, 'romanian', 1);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Vasile Milea',85, 'french',2);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Gheorghe Ivascu',20, 'american',3);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Maria Irina',40, 'francez', 4);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Maria Irina',40, 'french', 4);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Nicu Avacarei',35, 'iranian', 5);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Mia Garan',55,'romana',6);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Vasile Minar',78,'francez', 7);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Mia Garan',55,'romanian',6);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Vasile Minar',78,'french', 7);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ion Anamariei',19,'american',8);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Bogdan Ivascu',33,'francez', 9);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Mihai Mourar',36,'romana', 10);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Bogdan Ivascu',33,'french', 9);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Mihai Mourar',36,'romanian', 10);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ioan Neacsu',56, 'american', 11);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Maria Nedelcu',25,'american', 12);
-INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ioana Nicu',70,'romana',13);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ioana Nicu',70,'romanian',13);

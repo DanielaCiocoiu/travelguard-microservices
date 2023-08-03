@@ -13,6 +13,7 @@ public interface PersonMapper {
 
     @Mapping(target = "id", source = "person.id")
     PersonDto toDto(Person person);
+
     @Mapping(target = "id", source = "personDto.id")
     @InheritInverseConfiguration
     Person toEntity(PersonDto personDto);
@@ -20,4 +21,4 @@ public interface PersonMapper {
     List<PersonDto> toDtoList(List<Person> personList);
 
 
- }
+}

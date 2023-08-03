@@ -11,7 +11,6 @@ import java.util.Optional;
 @Mapper(componentModel = "spring")
 public interface PolicyMapper {
 
-    PolicyMapper INSTANCE = Mappers.getMapper(PolicyMapper.class);
     PolicyDto toDto(Policy policy);
 
     Policy toEntity(PolicyDto policyDto);

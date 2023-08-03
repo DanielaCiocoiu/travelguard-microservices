@@ -14,9 +14,12 @@ public interface PolicyService {
     List<Policy> findAllByValidity();
 
     Map<Type, Long> findAllByType();
+
     Optional<Policy> findById(int theId);
 
     Policy save(Policy policy);
-    void deleteById(int theid);
+
+    void deleteById(int theId);
+
     List<Policy> findPolicyByPriceBefore(double limit);
 }

@@ -10,10 +10,16 @@ import java.util.Optional;
 public interface PersonService {
 
     List<Person> findAll();
+
     Optional<Person> findById(int theId);
+
     Person save(Person person);
+
     Person deleteById(int personId);
-    Iterable<Person> getPersonsSortedAlfabetically(Sort sort);
+
+    Iterable<Person> getPersonsSortedAlphabetically(Sort sort);
+
     Iterable<Person> getPersonsInPages(Pageable pageable);
+
     List<Person> findPersonsByNationality(String nationality, Pageable pageable);
 }

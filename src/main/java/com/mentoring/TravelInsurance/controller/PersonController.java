@@ -23,8 +23,8 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class PersonController {
     private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
-    private PersonService personService;
-    private PersonMapper personMapper;
+    private final PersonService personService;
+    private final PersonMapper personMapper;
 
     public PersonController(PersonService personService, PersonMapper personMapper) {
         this.personService = personService;
@@ -36,7 +36,7 @@ public class PersonController {
     public ResponseEntity<List<PersonDto>> findAll() {
         List<Person> personList = personService.findAll();
         List<PersonDto> personDtoList = personMapper.toDtoList(personList);
-        logger.info("List of person + " + personDtoList.stream().count());
+        logger.info("List of person + " + (long) personDtoList.size());
         return new ResponseEntity<>(personDtoList, HttpStatus.OK);
     }
 
@@ -72,7 +72,6 @@ public class PersonController {
         return personMapper.toDto(personSaved);
     }
 
-
     @DeleteMapping("/person/{id}")
     public ResponseEntity<String> deleteById(@PathVariable(value = "id") int id) {
         PersonDto personDto = personMapper.toDto(personService.findById(id).get());
@@ -101,8 +100,8 @@ public class PersonController {
     }
 
     @GetMapping("/persons/sort")
-    public Iterable<Person> getPersonsSortedAlfabetically() {
-        return personService.getPersonsSortedAlfabetically(Sort.by("name").ascending());
+    public Iterable<Person> getPersonsSortedAlphabetically() {
+        return personService.getPersonsSortedAlphabetically(Sort.by("name").ascending());
     }
 
     //http://localhost:8080/api/persons/page?page=0&size=2
