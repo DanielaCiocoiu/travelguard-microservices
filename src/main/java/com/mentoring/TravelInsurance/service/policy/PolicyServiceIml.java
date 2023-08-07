@@ -50,7 +50,7 @@ public class PolicyServiceIml implements PolicyService {
         if (result.isPresent()) {
             result.get();
         } else {
-            throw new PolicyNotFoundException("Policy id {} not found - " + theId);
+            throw new PolicyNotFoundException("Policy id not found - " + theId);
         }
         return result;
     }

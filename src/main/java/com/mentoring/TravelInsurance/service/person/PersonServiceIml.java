@@ -3,11 +3,12 @@ package com.mentoring.TravelInsurance.service.person;
 import com.mentoring.TravelInsurance.dao.PersonRepository;
 import com.mentoring.TravelInsurance.error.person.PersonNotFoundException;
 import com.mentoring.TravelInsurance.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mentoring.TravelInsurance.model.Policy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,7 @@ import java.util.Optional;
 public class PersonServiceIml implements PersonService {
 
     private final PersonRepository personRepository;
-    private PersonService personService;
 
-    @Autowired
     public PersonServiceIml(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
@@ -55,14 +54,21 @@ public class PersonServiceIml implements PersonService {
 
     @Override
     public Person save(Person person) {
+        List<Policy> policy = person.getPolicy();
+        person.setPolicy(policy);
         personRepository.save(person);
         return person;
     }
 
     @Override
-    public Person deleteById(int personId) {
-        personRepository.deleteById(personId);
-
-        return null;
+    public void deleteById(int theId) {
+        personRepository.deleteById(theId);
     }
+
+    public ByteArrayInputStream exportExcel() {
+        List<Person> personList = personRepository.findAll();
+        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
+        return in;
+    }
+
 }

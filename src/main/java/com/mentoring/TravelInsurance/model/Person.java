@@ -1,6 +1,5 @@
 package com.mentoring.TravelInsurance.model;
 
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -38,9 +37,8 @@ public class Person {
     @Column(name = "nationality")
     private String nationality;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "id")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,  orphanRemoval = true, fetch=FetchType.EAGER)
+   @JoinColumn(name = "id")
     private List<Policy> policy;
 
     @Override

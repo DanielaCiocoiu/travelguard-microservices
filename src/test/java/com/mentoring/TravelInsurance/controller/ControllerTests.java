@@ -7,11 +7,17 @@ import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
+import com.mentoring.TravelInsurance.service.person.PersonExcel;
 import com.mentoring.TravelInsurance.service.person.PersonService;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +29,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +42,8 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -51,21 +64,26 @@ public class ControllerTests {
     @SpyBean
     private PersonMapperImpl personMapper;
 
+    @Spy
+    @InjectMocks
+    private PersonController personController;
     private ObjectMapper objectMapper;
-    private List<Policy> policyList;
     private List<PersonDto> personDtos;
     private PersonDto personDto;
 
     private static Person person, person1, person2;
-    private static Policy policyOb;
+    private static Policy policyOb, policyOb1, policyOb2;
     private List<Person> personList;
+    private InputStream inputStream;
 
     @BeforeAll
     static void initBeforeAll() {
-        policyOb = Setup.policyBuilder(2,true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK,160.00);
-        person = Person.builder().name("Maria").age(22).nationality("romana").policy(List.of(policyOb)).build();
-        person1 = Person.builder().name("Mincu Ion").age(30).nationality("americana").policy(List.of(policyOb)).build();
-        person2 = Person.builder().name("Vlad Minculescu").age(25).nationality("franceza").policy(List.of(policyOb)).build();
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0);
+        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00);
+        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00);
+        person = Setup.personBuilder("Maria", 22, "romanian", List.of(policyOb, policyOb1, policyOb2));
+        person1 = Setup.personBuilder("Irina", 50, "american", List.of(policyOb, policyOb1, policyOb2));
+        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of(policyOb, policyOb1, policyOb2));
     }
 
     @BeforeEach
@@ -74,6 +92,12 @@ public class ControllerTests {
         personDtos = new ArrayList<>();
         objectMapper = new ObjectMapper();
         personDto = new PersonDto();
+    }
+
+    @Before("")
+    public void before() {
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+        inputStream = personController.getClass().getClassLoader().getResourceAsStream("persons.xlsx");
     }
 
     @Test
@@ -100,7 +124,7 @@ public class ControllerTests {
 
     @Test
     public void listPersonById_whenGetMethod() throws Exception {
-        Person person = Setup.personBuilder("Ana Maria", 20, "romana");
+        Person person = person1;
         person.setId(1);
 
         personDto = personMapper.toDto(person);
@@ -122,5 +146,40 @@ public class ControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void testDownloadFile() throws Exception {
+        List<Person> people = new ArrayList<>();
+        people.add(person2);
+        when(personService.findAll()).thenReturn(people);
+
+        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(people);
+        when(personService.exportExcel()).thenReturn(in);
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/api/exportToExcel")
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM))
+                .andExpect(MockMvcResultMatchers.status()
+                        .is(200))
+                .andReturn();
+        assertNotNull(result);
+        assertEquals(200, result.getResponse().getStatus());
+        assertEquals(3647, result.getResponse().getContentAsByteArray().length);
+        assertEquals("application/vnd.ms-excel", result.getResponse().getContentType());
+    }
+    @Test
+    public void testExportExcelIsNull() {
+        List<Person> personList = new ArrayList<>();
+        Mockito.when(personService.findAll()).thenReturn(personList);
+        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
+        assertNotNull(in);
+    }
+    @Test
+    public void testExportExcelFindAllPersons() {
+        personList = List.of(person, person1, person2);
+        Mockito.when(personService.findAll()).thenReturn(personList);
+        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
+        assertEquals(3,personList.size());
     }
 }

@@ -9,13 +9,20 @@ import com.mentoring.TravelInsurance.service.person.PersonService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +30,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class PersonController {
     private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
+
     private final PersonService personService;
     private final PersonMapper personMapper;
 
@@ -31,7 +39,6 @@ public class PersonController {
         this.personMapper = personMapper;
     }
 
-    //http://localhost:8080/api/persons
     @GetMapping("/persons")
     public ResponseEntity<List<PersonDto>> findAll() {
         List<Person> personList = personService.findAll();
@@ -40,11 +47,11 @@ public class PersonController {
         return new ResponseEntity<>(personDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/person/{personId}")
-    public Optional<Person> getPersonId(@PathVariable int personId) {
-        Optional<Person> person = personService.findById(personId);
-        if (person.isEmpty() || personId < 0) {
-            throw new PersonNotFoundException("Person id not found - " + personId);
+    @GetMapping("/person/{id}")
+    public Optional<Person> getPersonId(@PathVariable int id) {
+        Optional<Person> person = personService.findById(id);
+        if (person.isEmpty() || id < 0) {
+            throw new PersonNotFoundException("Person id not found - " + id);
         }
         return person;
     }
@@ -56,7 +63,6 @@ public class PersonController {
         Person personToBeSaved = personMapper.toEntity(personDto);
         Person personSaved = personService.save(personToBeSaved);
         logger.info("Created new person {}", personSaved);
-        logger.debug("Created new person {}", personSaved);
         if (personDto.getAge() < 0) {
             throw new PersonWrongAgeException("Wrong age for person: " + personDto.getId());
         }
@@ -73,11 +79,12 @@ public class PersonController {
     }
 
     @DeleteMapping("/person/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable(value = "id") int id) {
-        PersonDto personDto = personMapper.toDto(personService.findById(id).get());
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deletePerson(@PathVariable(value = "id") int id) {
+        PersonDto personDto = personMapper.toDto(personService.findById(id).orElseThrow());
         personService.deleteById(personDto.getId());
         logger.info("Deleted person with id: + " + id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //http://localhost:8080/api/persons/9/Ilinca
@@ -116,5 +123,17 @@ public class PersonController {
         final Sort sort = Sort.by("name").ascending();
         final Pageable pageable = PageRequest.of(page, size, sort);
         return personService.findPersonsByNationality(nationality, pageable);
+    }
+
+    @GetMapping("/exportToExcel")
+    public ResponseEntity<Resource> getexportToExcel() {
+        String filename = "persons.xlsx";
+        InputStreamResource file = new InputStreamResource(personService.exportExcel());
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= person " + currentDateTime + ".xlsx")
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
     }
 }

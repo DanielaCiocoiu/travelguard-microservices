@@ -4,6 +4,7 @@ import com.mentoring.TravelInsurance.model.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,13 @@ public interface PersonService {
 
     Person save(Person person);
 
-    Person deleteById(int personId);
+    void deleteById(int theId);
 
     Iterable<Person> getPersonsSortedAlphabetically(Sort sort);
 
     Iterable<Person> getPersonsInPages(Pageable pageable);
 
     List<Person> findPersonsByNationality(String nationality, Pageable pageable);
+
+    ByteArrayInputStream exportExcel();
 }

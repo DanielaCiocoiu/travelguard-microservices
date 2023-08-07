@@ -8,6 +8,9 @@ management:
       enabled: "true"
 spring:
   jpa:
+    properties:
+      hibernate:
+        format_sql: "true"
     open-in-view: "false"
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: "true"

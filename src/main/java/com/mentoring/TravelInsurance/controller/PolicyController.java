@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
 public class PolicyController {
     private static final Logger logger = LoggerFactory.getLogger(PolicyController.class);
 
-    private PolicyService policyService;
+    private final PolicyService policyService;
 
-    private PolicyMapper policyMapper;
+    private final PolicyMapper policyMapper;
 
     public PolicyController(PolicyService policyService, PolicyMapper policyMapper) {
         this.policyService = policyService;
@@ -41,7 +42,7 @@ public class PolicyController {
     @GetMapping("/policies")
     public ResponseEntity<List<PolicyDto>> findAll() {
         List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyService.findAll());
-        logger.info("List of all policies: " + policyDtoList.stream().count());
+        logger.info("List of all policies: " + (long) policyDtoList.size());
         return new ResponseEntity<>(policyDtoList, HttpStatus.OK);
     }
 
@@ -89,14 +90,13 @@ public class PolicyController {
         return policyMapper.toDto(policySaved);
     }
 
-
-    @DeleteMapping("/policy/{Id}")
+    @DeleteMapping("/policy/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id) {
-        PolicyDto personDto = policyMapper.toDto(policyService.findById(id).get());
+    public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id)  {
+        PolicyDto personDto = policyMapper.toDto(policyService.findById(id).orElseThrow());
         policyService.deleteById(personDto.getId());
         logger.info("Deleted policy with id: + " + id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //http://localhost:8080/api/policy/9/250

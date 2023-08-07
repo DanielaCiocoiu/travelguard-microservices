@@ -6,11 +6,11 @@ INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,T
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(3,FALSE,'BUSINESS_TRAVEL_INSURANCE', 'LAISURE_ACTIVITIES', 500);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(1,TRUE,'MULTI_TRIP_INSURANCE', 'ACCIDENT_RISK', 300);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,FALSE,'MISSIONARY_INSURANCE', 'SPORTS', 500);
-INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'HAZARDOUS_WORK', 100);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'SPORTS', 100);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'HAZARDOUS_WORK', 150);
 
 
-INSERT INTO persons( name,age,nationality, id_policy) VALUES('Ana Ion',23, 'romanian', 1);
+INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ana Ion',23, 'romanian', 1);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Vasile Milea',85, 'french',2);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Gheorghe Ivascu',20, 'american',3);
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Maria Irina',40, 'french', 4);

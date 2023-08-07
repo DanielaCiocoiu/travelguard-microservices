@@ -9,13 +9,13 @@ import java.util.List;
 
 public class Setup {
 
-    public static Person personBuilder(String name, int age, String nationality){
+    public static Person personBuilder(String name, int age, String nationality, List<Policy> policy){
         return  Person.builder()
                 .id(0)
                 .name(name)
                 .age(age)
                 .nationality(nationality)
-                .policy(List.of(policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0)))
+                .policy(policy)
                 .build();
     }
 
