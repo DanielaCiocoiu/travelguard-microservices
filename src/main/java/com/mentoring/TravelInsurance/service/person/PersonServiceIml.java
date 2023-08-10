@@ -54,15 +54,20 @@ public class PersonServiceIml implements PersonService {
 
     @Override
     public Person save(Person person) {
-        List<Policy> policy = person.getPolicy();
-        person.setPolicy(policy);
+        List<Policy> policy = person.getPolicyList();
+        person.setPolicyList(policy);
         personRepository.save(person);
         return person;
     }
 
     @Override
-    public void deleteById(int theId) {
-        personRepository.deleteById(theId);
+    public Boolean deleteById(int theId) {
+        Optional<Person> optionalPerson = personRepository.findById(theId);
+        if (optionalPerson.isPresent()) {
+            personRepository.delete(optionalPerson.get());
+            return true;
+        }
+         throw new PersonNotFoundException("Did not find person with Id: " + theId);
     }
 
     public ByteArrayInputStream exportExcel() {

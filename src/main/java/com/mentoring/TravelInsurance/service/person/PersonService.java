@@ -16,7 +16,7 @@ public interface PersonService {
 
     Person save(Person person);
 
-    void deleteById(int theId);
+    Boolean deleteById(int theId);
 
     Iterable<Person> getPersonsSortedAlphabetically(Sort sort);
 

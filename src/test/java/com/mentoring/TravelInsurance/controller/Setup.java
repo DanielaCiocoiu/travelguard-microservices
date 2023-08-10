@@ -15,7 +15,7 @@ public class Setup {
                 .name(name)
                 .age(age)
                 .nationality(nationality)
-                .policy(policy)
+                .policyList(policy)
                 .build();
     }
 

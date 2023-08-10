@@ -8,6 +8,9 @@ INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(1,T
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,FALSE,'MISSIONARY_INSURANCE', 'SPORTS', 500);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'SPORTS', 100);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'HAZARDOUS_WORK', 150);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 250);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(2,FALSE,'GROUP_TRAVEL_INSURANCE', 'SPORTS', 120);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price) VALUES(3,TRUE,'WORLDWIDE_HEALTH_INSURANCE', 'SPORTS', 150);
 
 
 INSERT INTO persons( name,age,nationality,id_policy) VALUES('Ana Ion',23, 'romanian', 1);

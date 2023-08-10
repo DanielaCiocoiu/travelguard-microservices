@@ -16,5 +16,5 @@ public class PersonDto {
     private String name;
     private Integer age;
     private String nationality;
-    private List<PolicyDto> policy;
+    private List<PolicyDto> policyList;
 }

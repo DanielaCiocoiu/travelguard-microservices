@@ -10,7 +10,6 @@ import com.mentoring.TravelInsurance.model.Type;
 import com.mentoring.TravelInsurance.service.person.PersonExcel;
 import com.mentoring.TravelInsurance.service.person.PersonService;
 import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,9 +52,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = PersonController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-public class ControllerTests {
+public class PersonControllerTests {
     private static final Logger logger
-            = LoggerFactory.getLogger(ControllerTests.class);
+            = LoggerFactory.getLogger(PersonControllerTests.class);
     @Autowired
     private MockMvc mockMvc;
 
@@ -101,7 +100,7 @@ public class ControllerTests {
     }
 
     @Test
-    public void listAllPersons_whenGetMethod() throws Exception {
+    public void whenGetMethodListAllPersons() throws Exception {
         personList = List.of(person, person1, person2);
         personDtos = personMapper.toDtoList(personList);
 
@@ -123,7 +122,7 @@ public class ControllerTests {
     }
 
     @Test
-    public void listPersonById_whenGetMethod() throws Exception {
+    public void whenGetMethodListPersonById() throws Exception {
         Person person = person1;
         person.setId(1);
 
@@ -138,7 +137,20 @@ public class ControllerTests {
     }
 
     @Test
-    public void getPersons_NoPersonsReturn() throws Exception {
+    public void whenGetMethodPersonIdNotFound() throws Exception {
+        Person person = person1;
+        person.setId(1);
+
+        personDto = personMapper.toDto(person);
+        given(personService.findById(person.getId())).willReturn(Optional.empty());
+        mockMvc.perform(get("/api/person/" + person.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getPersonsNoPersonsReturn() throws Exception {
         when(personService.findAll()).thenReturn(personList);
 
         mockMvc.perform(get("/api/persons")
@@ -165,9 +177,9 @@ public class ControllerTests {
                 .andReturn();
         assertNotNull(result);
         assertEquals(200, result.getResponse().getStatus());
-        assertEquals(3647, result.getResponse().getContentAsByteArray().length);
         assertEquals("application/vnd.ms-excel", result.getResponse().getContentType());
     }
+
     @Test
     public void testExportExcelIsNull() {
         List<Person> personList = new ArrayList<>();

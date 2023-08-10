@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -92,7 +91,7 @@ public class PolicyController {
 
     @DeleteMapping("/policy/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id)  {
+    public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id) {
         PolicyDto personDto = policyMapper.toDto(policyService.findById(id).orElseThrow());
         policyService.deleteById(personDto.getId());
         logger.info("Deleted policy with id: + " + id);

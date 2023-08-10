@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class PersonExcel {
-    static String[] HEADERs = { "Id", "Name", "Age", "Nationality", "Policy" };
+    static String[] HEADERs = {"Id", "Name", "Age", "Nationality", "Policy"};
     static String SHEET = "Travel insurance persons policies";
 
 
     public static ByteArrayInputStream tutorialsToExcel(List<Person> personList) {
 
-        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(SHEET);
 
             Row headerRow = sheet.createRow(0);
@@ -41,12 +41,12 @@ public class PersonExcel {
             int rowIdx = 1;
             for (Person person : personList) {
                 Row row = sheet.createRow(rowIdx++);
-               // row.setRowStyle(headerStyle);
+                // row.setRowStyle(headerStyle);
                 row.createCell(0).setCellValue(person.getId());
                 row.createCell(1).setCellValue(person.getName());
                 row.createCell(2).setCellValue(person.getAge());
                 row.createCell(3).setCellValue(person.getNationality());
-                row.createCell(4).setCellValue(String.valueOf(person.getPolicy()));
+                row.createCell(4).setCellValue(String.valueOf(person.getPolicyList()));
             }
 
             workbook.write(out);

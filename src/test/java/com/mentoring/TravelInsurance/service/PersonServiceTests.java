@@ -2,6 +2,7 @@ package com.mentoring.TravelInsurance.service;
 
 import com.mentoring.TravelInsurance.controller.PersonController;
 import com.mentoring.TravelInsurance.controller.Setup;
+import com.mentoring.TravelInsurance.dao.PersonRepository;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
@@ -10,32 +11,39 @@ import com.mentoring.TravelInsurance.service.person.PersonService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonAppTests {
+public class PersonServiceTests {
     private static final Logger logger
-            = LoggerFactory.getLogger(PersonAppTests.class);
+            = LoggerFactory.getLogger(PersonServiceTests.class);
     @Autowired
     private PersonController personController;
     @Autowired
     private PersonService personService;
-
+    @Mock
+    private PersonRepository personRepository;
     List<Policy> policiesList;
     List<Person> personList;
     private static Policy policyOb, policyOb1, policyOb2;
@@ -59,7 +67,7 @@ public class PersonAppTests {
 
     @Test
     void contextLoads() {
-        logger.info("Example log from {}", PersonAppTests.class.getSimpleName());
+        logger.info("Example log from {}", PersonServiceTests.class.getSimpleName());
         Assertions.assertThat(personController).isNotNull();
     }
 
@@ -85,7 +93,7 @@ public class PersonAppTests {
     @Rollback(value = false)
     public void savePerson() {
         Person person = person1;
-        personService.save(person);
+       var result= personService.save(person);
         Assertions.assertThat(person.getId()).isGreaterThan(0);
     }
 
@@ -99,13 +107,38 @@ public class PersonAppTests {
         Assertions.assertThat(personUpdated.get().getName()).isEqualTo("Irina");
     }
     @Test
-    public void testDeleteById() {
-        Person person = person1;
-        person.setId(1);
-        Optional<Person> actual = personService.findById(person.getId());
-        if (actual.isPresent()) {
-            personService.deleteById(person.getId());
-            assertEquals(0, actual.stream().count());
-        }
+    void deleteEmployee() {
+        Person person21 = person2;
+        person21.setId(13);
+
+        List<Policy> policy = person2.getPolicyList();
+        person21.setPolicyList(policy);
+        person21.getPolicyList().get(0).setId(13);
+
+        personService.save(person21);
+        personService.deleteById(person21.getId());
+
+        List<Person> result = new ArrayList<>();
+        personService.findAll().forEach(e -> result.add(e));
+        logger.info("Number of persons after deletion: " + (long) result.size());
+        assertEquals(result.size(), 14);
     }
+    @Test
+    public void testExportExcel() {
+        personList = List.of(person, person1, person2);
+        Mockito.when(personRepository.findAll()).thenReturn(personList);
+        ByteArrayInputStream in = personService.exportExcel();
+        assertNotNull(in);
+    }
+
+    @Test
+    public void testGetPersonsInPages() {
+        Pageable pageable = PageRequest.of(0, 10);
+        personList = List.of(person, person1, person2);
+        Page<Person> page = new PageImpl<>(personList, pageable, personList.size());
+        Mockito.when(personRepository.findAll(pageable)).thenReturn(page);
+        Iterable<Person> result = personService.getPersonsInPages(pageable);
+        assertNotNull(result);
+    }
+
 }
