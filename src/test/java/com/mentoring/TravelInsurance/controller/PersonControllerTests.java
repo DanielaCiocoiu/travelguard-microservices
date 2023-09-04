@@ -2,6 +2,7 @@ package com.mentoring.TravelInsurance.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentoring.TravelInsurance.dto.PersonDto;
+import com.mentoring.TravelInsurance.error.person.PersonNotFoundException;
 import com.mentoring.TravelInsurance.mappers.PersonMapperImpl;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
@@ -36,7 +37,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -77,12 +77,12 @@ public class PersonControllerTests {
 
     @BeforeAll
     static void initBeforeAll() {
-        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0);
-        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00);
-        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00);
-        person = Setup.personBuilder("Maria", 22, "romanian", List.of(policyOb, policyOb1, policyOb2));
-        person1 = Setup.personBuilder("Irina", 50, "american", List.of(policyOb, policyOb1, policyOb2));
-        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of(policyOb, policyOb1, policyOb2));
+        person = Setup.personBuilder("Maria", 22, "romanian");
+        person1 = Setup.personBuilder("Irina", 50, "american");
+        person2 = Setup.personBuilder("Iona", 22, "romanian");
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0, List.of(person, person1, person2));
+        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00, List.of(person, person1, person2));
+        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00, List.of(person, person1, person2));
     }
 
     @BeforeEach
@@ -103,7 +103,6 @@ public class PersonControllerTests {
     public void whenGetMethodListAllPersons() throws Exception {
         personList = List.of(person, person1, person2);
         personDtos = personMapper.toDtoList(personList);
-
         given(personService
                 .findAll())
                 .willReturn(personList);
@@ -122,13 +121,11 @@ public class PersonControllerTests {
     }
 
     @Test
-    public void whenGetMethodListPersonById() throws Exception {
+    public void whenGetMethodPersonById() throws Exception {
         Person person = person1;
         person.setId(1);
-
         personDto = personMapper.toDto(person);
-        given(personService.findById(person.getId())).willReturn(Optional.of(person));
-
+        given(personService.findById(personDto.getId())).willReturn(person);
         mockMvc.perform(get("/api/person/" + person.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -140,9 +137,8 @@ public class PersonControllerTests {
     public void whenGetMethodPersonIdNotFound() throws Exception {
         Person person = person1;
         person.setId(1);
-
         personDto = personMapper.toDto(person);
-        given(personService.findById(person.getId())).willReturn(Optional.empty());
+        when(personService.findById(person.getId())).thenThrow(new PersonNotFoundException("Person id not found: " + personDto.getId()));
         mockMvc.perform(get("/api/person/" + person.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

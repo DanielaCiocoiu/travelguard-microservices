@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,5 +14,4 @@ public class PersonDto {
     private String name;
     private Integer age;
     private String nationality;
-    private List<PolicyDto> policyList;
 }

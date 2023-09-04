@@ -1,11 +1,9 @@
 package com.mentoring.TravelInsurance.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,21 +36,16 @@ public class Person {
     @Column(name = "nationality")
     private String nationality;
 
-    @OneToMany(cascade = CascadeType.ALL,  orphanRemoval = true, fetch=FetchType.EAGER)
-   @JoinColumn(name = "id")
-    @JsonIgnore
-    private List<Policy> policyList;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(name, person.name) && Objects.equals(age, person.age) && Objects.equals(nationality, person.nationality) && Objects.equals(policyList, person.policyList);
+        return Objects.equals(name, person.name) && Objects.equals(age, person.age) && Objects.equals(nationality, person.nationality);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, age, nationality, policyList);
+        return Objects.hash(name, age, nationality);
     }
 }

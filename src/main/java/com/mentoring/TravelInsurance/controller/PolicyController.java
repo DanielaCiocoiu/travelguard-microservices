@@ -1,7 +1,6 @@
 package com.mentoring.TravelInsurance.controller;
 
 import com.mentoring.TravelInsurance.dto.PolicyDto;
-import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.mappers.PolicyMapper;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class PolicyController {
@@ -31,53 +29,34 @@ public class PolicyController {
         this.policyMapper = policyMapper;
     }
 
-    //http://localhost:8080/api/policies/price/50.0
-    @GetMapping("/policies/price/{price}")
-    public List<Policy> findPolicyByPriceBefore(@PathVariable double price) {
-        return policyService.findPolicyByPriceBefore(price);
-    }
-
     //http://localhost:8080/api/policies
     @GetMapping("/policies")
     public ResponseEntity<List<PolicyDto>> findAll() {
-        List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyService.findAll());
+        List<Policy> policyList = policyService.findAll();
+        List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyList);
         logger.info("List of all policies: " + (long) policyDtoList.size());
-        return new ResponseEntity<>(policyDtoList, HttpStatus.OK);
-    }
-
-    //http://localhost:8080/api/type
-    @GetMapping("/type")
-    public ResponseEntity<Map<Type, Long>> findAllPoliciesByType() {
-        Map<Type, Long> result = policyService.findAllByType();
-        logger.info("List of all policies by type: " + result);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    //http://localhost:8080/api/validity
-    @GetMapping("/validity")
-    public ResponseEntity<List<PolicyDto>> findAllPoliciesValidity() {
-        List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyService.findAllByValidity());
-        logger.info("List of all policies by validity: " + policyDtoList.stream().count());
+        if (policyDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(policyDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/policy/{policyId}")
-    public ResponseEntity<Optional<Policy>> getPolicy(@PathVariable int policyId) {
-        Optional<Policy> policy = policyService.findById(policyId);
-        if (policy.isEmpty() || policyId < 0) {
-            throw new PolicyNotFoundException("Policy id {} not found - " + policyId);
-        }
-        return new ResponseEntity<>(policy, HttpStatus.OK);
+    public ResponseEntity<PolicyDto> getPolicy(@PathVariable int policyId) {
+        Policy policy = policyService.findById(policyId);
+        PolicyDto policyDto = policyMapper.toDto(policy);
+        policyService.findById(policyDto.getId());
+        return new ResponseEntity<>(policyDto, HttpStatus.OK);
     }
 
     @PostMapping("/policy")
-    @ResponseStatus(HttpStatus.CREATED)
-    public PolicyDto addPolicy(@Valid @RequestBody PolicyDto policyDto) {
+    public ResponseEntity<PolicyDto> addPolicy(@Valid @RequestBody PolicyDto policyDto) {
         policyDto.setId(0);
         Policy policyToBeSaved = policyMapper.toEntity(policyDto);
         Policy policySaved = policyService.save(policyToBeSaved);
         logger.info("Created new policy {}", policySaved);
-        return policyMapper.toDto(policySaved);
+         policyMapper.toDto(policySaved);
+        return new ResponseEntity<>(policyDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/policy")
@@ -92,13 +71,35 @@ public class PolicyController {
     @DeleteMapping("/policy/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id) {
-        PolicyDto personDto = policyMapper.toDto(policyService.findById(id).orElseThrow());
+        PolicyDto personDto = policyMapper.toDto(policyService.findById(id));
         policyService.deleteById(personDto.getId());
         logger.info("Deleted policy with id: + " + id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //http://localhost:8080/api/policy/9/250
+    //http://localhost:8080/api/type
+    @GetMapping("/type")
+    public ResponseEntity<Map<Type, Long>> findAllPoliciesByType() {
+        Map<Type, Long> result = policyService.findAllByType();
+        logger.info("List of all policies by type: " + result);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //http://localhost:8080/api/policies/price/50.0
+    @GetMapping("/policies/price/{price}")
+    public List<Policy> findPolicyByPriceBefore(@PathVariable double price) {
+        return policyService.findPolicyByPriceBefore(price);
+    }
+
+    //http://localhost:8080/api/validity
+    @GetMapping("/validity")
+    public ResponseEntity<List<PolicyDto>> findAllPoliciesValidity() {
+        List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyService.findAllByValidity());
+        logger.info("List of all policies by validity: " + policyDtoList.stream().count());
+        return new ResponseEntity<>(policyDtoList, HttpStatus.OK);
+    }
+
+      //http://localhost:8080/api/policy/9/250
     @PatchMapping("/policy/{id}/{price}")
     public ResponseEntity<Policy> updatePolicyPrice(@PathVariable int id, @PathVariable Double price) {
         var thePolicy = policyService.findAll()

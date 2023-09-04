@@ -4,15 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class PersonRestExceptionHandler {
-
+public class PersonRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException exc) {
         PersonErrorResponse errorResponse = new PersonErrorResponse();
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setStatus(HttpStatus.valueOf(HttpStatus.NOT_FOUND.value()));
         errorResponse.setMessage(exc.getMessage());
         errorResponse.setTimestamp(System.currentTimeMillis());
 
@@ -22,10 +22,8 @@ public class PersonRestExceptionHandler {
     //handler de exceptie generic, pt orice tip de ex
     @ExceptionHandler
     public ResponseEntity<PersonErrorResponse> handleException(Exception exc) {
-
         PersonErrorResponse errorResponse = new PersonErrorResponse();
-
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setStatus(HttpStatus.valueOf(HttpStatus.BAD_REQUEST.value()));
         errorResponse.setMessage(exc.getMessage());
         errorResponse.setTimestamp(System.currentTimeMillis());
 

@@ -1,4 +1,4 @@
-package com.mentoring.TravelInsurance.service;
+package com.mentoring.TravelInsurance.service.restTemplate;
 
 import com.mentoring.TravelInsurance.model.Person;
 import org.springframework.http.*;

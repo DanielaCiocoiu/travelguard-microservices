@@ -6,13 +6,12 @@ import org.springframework.data.domain.Sort;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Optional;
 
 public interface PersonService {
 
     List<Person> findAll();
 
-    Optional<Person> findById(int theId);
+    Person findById(int theId);
 
     Person save(Person person);
 

@@ -1,8 +1,11 @@
 package com.mentoring.TravelInsurance.dto;
 
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
+import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Type;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +20,5 @@ public class PolicyDto {
     private Type type;
     private BenefitAndLimit benefitAndLimit;
     private double price;
+    private List<Person> personList;
 }

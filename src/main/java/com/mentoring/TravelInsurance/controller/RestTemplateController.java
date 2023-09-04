@@ -1,7 +1,7 @@
 package com.mentoring.TravelInsurance.controller;
 
 import com.mentoring.TravelInsurance.model.Person;
-import com.mentoring.TravelInsurance.service.RestTemplateService;
+import com.mentoring.TravelInsurance.service.restTemplate.RestTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

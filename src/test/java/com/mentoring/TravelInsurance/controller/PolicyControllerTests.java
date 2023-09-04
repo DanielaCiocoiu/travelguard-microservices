@@ -5,6 +5,7 @@ import com.mentoring.TravelInsurance.dto.PolicyDto;
 import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.mappers.PolicyMapperImpl;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
+import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
 import com.mentoring.TravelInsurance.service.policy.PolicyService;
@@ -29,7 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -61,14 +61,18 @@ public class PolicyControllerTests {
     private List<PolicyDto> policyDtos;
     private PolicyDto policyDto;
 
-   private static Policy policy, policy1, policy2;
+    private static Person person, person1, person2;
+    private static Policy policy, policy1, policy2;
     private List<Policy> policyList;
 
     @BeforeAll
     static void initBeforeAll() {
-        policy = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0);
-        policy1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00);
-        policy2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00);
+        person = Setup.personBuilder("Maria", 22, "romanian");
+        person1 = Setup.personBuilder("Irina", 50, "american");
+        person2 = Setup.personBuilder("Iona", 22, "romanian");
+        policy = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0, List.of(person, person1, person2));
+        policy1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00, List.of(person, person1, person2));
+        policy2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00, List.of(person, person1, person2));
     }
 
     @BeforeEach
@@ -104,10 +108,8 @@ public class PolicyControllerTests {
     public void whenGetMethodListPersonById() throws Exception {
         Policy policy3 = policy;
         policy3.setId(1);
-
         policyDto = policyMapper.toDto(policy3);
-        given(policyService.findById(policy3.getId())).willReturn(Optional.of(policy3));
-
+        given(policyService.findById(policyDto.getId())).willReturn(policy3);
         mockMvc.perform(get("/api/policy/" + policy3.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

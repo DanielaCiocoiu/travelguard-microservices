@@ -27,7 +27,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,12 +50,12 @@ public class PersonServiceTests {
 
     @BeforeAll
     static void initBeforeAll() {
-        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0);
-        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00);
-        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00);
-        person = Setup.personBuilder("Maria", 22, "romanian", List.of(policyOb));
-        person1 = Setup.personBuilder("Irina", 50, "american", List.of(policyOb1));
-        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of(policyOb2));
+        person = Setup.personBuilder("Maria", 22, "romanian");
+        person1 = Setup.personBuilder("Irina", 50, "american");
+        person2 = Setup.personBuilder("Iona", 22, "romanian");
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0, List.of(person, person1, person2));
+        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00, List.of(person, person1, person2));
+        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00, List.of(person, person1, person2));
     }
 
     @BeforeEach
@@ -84,8 +83,8 @@ public class PersonServiceTests {
     public void getPersonById() {
         person.setId(0);
         personService.save(person);
-        Optional<Person> actual = personService.findById(person.getId());
-        assertEquals(person.getId(), actual.orElseThrow().getId());
+        Person actual = personService.findById(person.getId());
+        assertEquals(person.getId(), actual.getId());
     }
 
     @Test
@@ -93,7 +92,7 @@ public class PersonServiceTests {
     @Rollback(value = false)
     public void savePerson() {
         Person person = person1;
-       var result= personService.save(person);
+        var result = personService.save(person);
         Assertions.assertThat(person.getId()).isGreaterThan(0);
     }
 
@@ -103,17 +102,14 @@ public class PersonServiceTests {
     public void updatePersonTest() {
         person.setName("Irina");
         personService.save(person);
-        Optional<Person> personUpdated = personService.findById(person.getId());
-        Assertions.assertThat(personUpdated.get().getName()).isEqualTo("Irina");
+        Person personUpdated = personService.findById(person.getId());
+        Assertions.assertThat(personUpdated.getName()).isEqualTo("Irina");
     }
+
     @Test
     void deleteEmployee() {
         Person person21 = person2;
         person21.setId(13);
-
-        List<Policy> policy = person2.getPolicyList();
-        person21.setPolicyList(policy);
-        person21.getPolicyList().get(0).setId(13);
 
         personService.save(person21);
         personService.deleteById(person21.getId());
@@ -123,6 +119,7 @@ public class PersonServiceTests {
         logger.info("Number of persons after deletion: " + (long) result.size());
         assertEquals(result.size(), 14);
     }
+
     @Test
     public void testExportExcel() {
         personList = List.of(person, person1, person2);
@@ -140,5 +137,4 @@ public class PersonServiceTests {
         Iterable<Person> result = personService.getPersonsInPages(pageable);
         assertNotNull(result);
     }
-
 }

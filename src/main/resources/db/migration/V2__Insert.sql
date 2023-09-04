@@ -1,0 +1,28 @@
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 50,1 );
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,FALSE,'SCHENGEN_INSURANCE', 'LAISURE_ACTIVITIES', 100, 2);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,TRUE,'GROUP_TRAVEL_INSURANCE', 'SPORTS', 200, 3);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,FALSE,'INTERNATIONAL_TRAVEL_INSURANCE', 'ACCIDENT_RISK', 70, 4);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,TRUE,'WORLDWIDE_HEALTH_INSURANCE', 'SPORTS', 150, 5);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,FALSE,'BUSINESS_TRAVEL_INSURANCE', 'LAISURE_ACTIVITIES', 500, 6);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'MULTI_TRIP_INSURANCE', 'ACCIDENT_RISK', 300, 7);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,FALSE,'MISSIONARY_INSURANCE', 'SPORTS', 500, 8);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'SPORTS', 100, 9);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,TRUE,'PRE_EXISTING_CONDITION_INSURANCE', 'HAZARDOUS_WORK', 150, 10);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 250, 11);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,FALSE,'GROUP_TRAVEL_INSURANCE', 'SPORTS', 120, 12);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,TRUE,'WORLDWIDE_HEALTH_INSURANCE', 'SPORTS', 150, 13);
+
+
+INSERT INTO persons( name,age,nationality) VALUES('Ana Ion',23, 'romanian');
+INSERT INTO persons( name,age,nationality) VALUES('Vasile Milea',85, 'french');
+INSERT INTO persons( name,age,nationality) VALUES('Gheorghe Ivascu',20, 'american');
+INSERT INTO persons( name,age,nationality) VALUES('Maria Irina',40, 'french');
+INSERT INTO persons( name,age,nationality) VALUES('Nicu Avacarei',35, 'iranian');
+INSERT INTO persons( name,age,nationality) VALUES('Mia Garan',55,'romanian');
+INSERT INTO persons( name,age,nationality) VALUES('Vasile Minar',78,'french');
+INSERT INTO persons( name,age,nationality) VALUES('Ion Anamariei',19,'american');
+INSERT INTO persons( name,age,nationality) VALUES('Bogdan Ivascu',33,'french');
+INSERT INTO persons( name,age,nationality) VALUES('Mihai Mourar',36,'romanian');
+INSERT INTO persons( name,age,nationality) VALUES('Ioan Neacsu',56, 'american');
+INSERT INTO persons( name,age,nationality) VALUES('Maria Nedelcu',25,'american');
+INSERT INTO persons( name,age,nationality) VALUES('Ioana Nicu',70,'romanian');

@@ -9,17 +9,16 @@ import java.util.List;
 
 public class Setup {
 
-    public static Person personBuilder(String name, int age, String nationality, List<Policy> policy){
+    public static Person personBuilder(String name, int age, String nationality){
         return  Person.builder()
                 .id(0)
                 .name(name)
                 .age(age)
                 .nationality(nationality)
-                .policyList(policy)
                 .build();
     }
 
-    public static Policy policyBuilder(int eligibility, boolean validity, Type type, BenefitAndLimit benefitAndLimit, double price ) {
+    public static Policy policyBuilder(int eligibility, boolean validity, Type type, BenefitAndLimit benefitAndLimit, double price, List<Person> person ) {
         return Policy.builder()
                 .id(0)
                 .eligibility(eligibility)
@@ -27,6 +26,7 @@ public class Setup {
                 .type(type)
                 .benefitAndLimit(benefitAndLimit)
                 .price(price)
+                .personList(person)
                 .build();
     }
 }

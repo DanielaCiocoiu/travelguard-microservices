@@ -1,8 +1,6 @@
 package com.mentoring.TravelInsurance.controller;
 
 import com.mentoring.TravelInsurance.dto.PersonDto;
-import com.mentoring.TravelInsurance.error.person.PersonNotFoundException;
-import com.mentoring.TravelInsurance.error.person.PersonWrongAgeException;
 import com.mentoring.TravelInsurance.mappers.PersonMapper;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.service.person.PersonService;
@@ -24,8 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class PersonController {
@@ -48,12 +45,10 @@ public class PersonController {
     }
 
     @GetMapping("/person/{id}")
-    public Optional<Person> getPersonId(@PathVariable int id) {
-        Optional<Person> person = personService.findById(id);
-        if (person.isEmpty() || id < 0) {
-            throw new PersonNotFoundException("Person id not found - " + id);
-        }
-        return person;
+    public ResponseEntity<PersonDto> getPersonId(@PathVariable int id) {
+        PersonDto personDto = personMapper.toDto(personService.findById(id));
+        personService.findById(personDto.getId());
+        return new ResponseEntity<>(personDto, HttpStatus.OK);
     }
 
     @PostMapping("/person")
@@ -63,9 +58,6 @@ public class PersonController {
         Person personToBeSaved = personMapper.toEntity(personDto);
         Person personSaved = personService.save(personToBeSaved);
         logger.info("Created new person {}", personSaved);
-        if (personDto.getAge() < 0) {
-            throw new PersonWrongAgeException("Wrong age for person: " + personDto.getId());
-        }
         return personMapper.toDto(personSaved);
     }
 
@@ -81,7 +73,7 @@ public class PersonController {
     @DeleteMapping("/person/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deletePerson(@PathVariable(value = "id") int id) {
-        PersonDto personDto = personMapper.toDto(personService.findById(id).orElseThrow());
+        PersonDto personDto = personMapper.toDto(personService.findById(id));
         personService.deleteById(personDto.getId());
         logger.info("Deleted person with id: + " + id);
         return new ResponseEntity<>(HttpStatus.OK);

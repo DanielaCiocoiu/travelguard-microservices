@@ -13,7 +13,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: "true"
     open-in-view: "false"
-    defer-datasource-initialization: "true"
+    defer-datasource-initialization: "false"
     generate-ddl: "true"
     hibernate:
       globally_quoted_identifiers: true
@@ -30,8 +30,20 @@ spring:
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=LEGACY;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     password: sa
-logging:
-  level:
-    org:
-      springframework: info
-    web: debug
+  logging:
+    level:
+      org:
+        springframework: info
+      web: debug
+
+
+  flyway:
+    user: sa
+    password: sa
+    schemas: test
+    url: jdbc:h2:mem:test
+    locations: filesystem:db/migration
+    enabled: true
+server:
+  error:
+    include-message=ALWAYS:

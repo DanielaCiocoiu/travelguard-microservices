@@ -46,7 +46,6 @@ public class PersonExcel {
                 row.createCell(1).setCellValue(person.getName());
                 row.createCell(2).setCellValue(person.getAge());
                 row.createCell(3).setCellValue(person.getNationality());
-                row.createCell(4).setCellValue(String.valueOf(person.getPolicyList()));
             }
 
             workbook.write(out);
