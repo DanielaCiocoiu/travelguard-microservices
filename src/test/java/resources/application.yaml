@@ -1,12 +1,3 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  info:
-    env:
-      enabled: "true"
-spring:
   jpa:
     properties:
       hibernate:
@@ -21,7 +12,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       show-sql: "true"
-      ddl-auto: create-drop
+      ddl-auto: none
     h2: null
     console:
       enabled: "true"
@@ -35,15 +26,5 @@ spring:
       org:
         springframework: info
       web: debug
-
-
   flyway:
-    user: sa
-    password: sa
-    schemas: test
-    url: jdbc:h2:mem:test
-    locations: filesystem:db/migration
-    enabled: true
-server:
-  error:
-    include-message=ALWAYS:
+    enabled: false

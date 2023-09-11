@@ -1,4 +1,4 @@
-package com.mentoring.TravelInsurance.dao;
+package com.mentoring.TravelInsurance.repository;
 
 import com.mentoring.TravelInsurance.model.Person;
 import org.springframework.data.domain.Pageable;

@@ -1,17 +1,16 @@
 package com.mentoring.TravelInsurance.service.person;
 
-import com.mentoring.TravelInsurance.dao.PersonRepository;
+import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.error.person.PersonNotFoundException;
 import com.mentoring.TravelInsurance.error.person.PersonWrongAgeException;
 import com.mentoring.TravelInsurance.model.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class PersonServiceIml implements PersonService {
 
@@ -66,10 +65,5 @@ public class PersonServiceIml implements PersonService {
          throw new PersonNotFoundException("Did not find person with Id: " + theId);
     }
 
-    public ByteArrayInputStream exportExcel() {
-        List<Person> personList = personRepository.findAll();
-        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
-        return in;
-    }
 
 }

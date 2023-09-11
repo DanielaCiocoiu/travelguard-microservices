@@ -8,7 +8,6 @@ import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
-import com.mentoring.TravelInsurance.service.person.PersonExcel;
 import com.mentoring.TravelInsurance.service.person.PersonService;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +27,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +36,6 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -154,40 +147,5 @@ public class PersonControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
-    }
-
-    @Test
-    public void testDownloadFile() throws Exception {
-        List<Person> people = new ArrayList<>();
-        people.add(person2);
-        when(personService.findAll()).thenReturn(people);
-
-        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(people);
-        when(personService.exportExcel()).thenReturn(in);
-        MvcResult result = mockMvc
-                .perform(MockMvcRequestBuilders
-                        .get("/api/exportToExcel")
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM))
-                .andExpect(MockMvcResultMatchers.status()
-                        .is(200))
-                .andReturn();
-        assertNotNull(result);
-        assertEquals(200, result.getResponse().getStatus());
-        assertEquals("application/vnd.ms-excel", result.getResponse().getContentType());
-    }
-
-    @Test
-    public void testExportExcelIsNull() {
-        List<Person> personList = new ArrayList<>();
-        Mockito.when(personService.findAll()).thenReturn(personList);
-        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
-        assertNotNull(in);
-    }
-    @Test
-    public void testExportExcelFindAllPersons() {
-        personList = List.of(person, person1, person2);
-        Mockito.when(personService.findAll()).thenReturn(personList);
-        ByteArrayInputStream in = PersonExcel.tutorialsToExcel(personList);
-        assertEquals(3,personList.size());
     }
 }

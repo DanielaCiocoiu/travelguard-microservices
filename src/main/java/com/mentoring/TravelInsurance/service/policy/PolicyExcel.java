@@ -1,6 +1,6 @@
-package com.mentoring.TravelInsurance.service.person;
+package com.mentoring.TravelInsurance.service.policy;
 
-import com.mentoring.TravelInsurance.model.Person;
+import com.mentoring.TravelInsurance.model.Policy;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,12 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PersonExcel {
-    static String[] HEADERs = {"Id", "Name", "Age", "Nationality", "Policy"};
-    static String SHEET = "Travel insurance persons policies";
+public class PolicyExcel {
+    private static final String[] HEADERs = {"Id", "Eligibility", "Validity", "Type", "BenefitAndLimit", "Price"};
+    private static final String SHEET = "Travel insurance policies";
 
 
-    public static ByteArrayInputStream tutorialsToExcel(List<Person> personList) {
+    public ByteArrayInputStream tutorialsToExcel(List<Policy> policiesList) {
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(SHEET);
@@ -39,13 +39,14 @@ public class PersonExcel {
             headerStyle.setFont(font);
 
             int rowIdx = 1;
-            for (Person person : personList) {
+            for (Policy policy : policiesList) {
                 Row row = sheet.createRow(rowIdx++);
-                // row.setRowStyle(headerStyle);
-                row.createCell(0).setCellValue(person.getId());
-                row.createCell(1).setCellValue(person.getName());
-                row.createCell(2).setCellValue(person.getAge());
-                row.createCell(3).setCellValue(person.getNationality());
+                row.createCell(0).setCellValue(policy.getId());
+                row.createCell(1).setCellValue(policy.getEligibility());
+                row.createCell(2).setCellValue(policy.isValidity());
+                row.createCell(3).setCellValue(policy.getType().toString());
+                row.createCell(4).setCellValue(policy.getBenefitAndLimit().toString());
+                row.createCell(5).setCellValue(policy.getPrice());
             }
 
             workbook.write(out);

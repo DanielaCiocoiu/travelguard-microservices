@@ -1,4 +1,4 @@
-INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 50,1 );
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 50, 1 );
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,FALSE,'SCHENGEN_INSURANCE', 'LAISURE_ACTIVITIES', 100, 2);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,TRUE,'GROUP_TRAVEL_INSURANCE', 'SPORTS', 200, 3);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,FALSE,'INTERNATIONAL_TRAVEL_INSURANCE', 'ACCIDENT_RISK', 70, 4);
@@ -11,6 +11,7 @@ INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) 
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(1,TRUE,'VISITOR_INSURANCE', 'ACCIDENT_RISK', 250, 11);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(2,FALSE,'GROUP_TRAVEL_INSURANCE', 'SPORTS', 120, 12);
 INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,TRUE,'WORLDWIDE_HEALTH_INSURANCE', 'SPORTS', 150, 13);
+INSERT INTO policies(eligibility,validity,type,benefitAndLimit,price,id_person) VALUES(3,TRUE,'WORLDWIDE_HEALTH_INSURANCE', 'SPORTS', 150, 14);
 
 
 INSERT INTO persons( name,age,nationality) VALUES('Ana Ion',23, 'romanian');
@@ -26,3 +27,4 @@ INSERT INTO persons( name,age,nationality) VALUES('Mihai Mourar',36,'romanian');
 INSERT INTO persons( name,age,nationality) VALUES('Ioan Neacsu',56, 'american');
 INSERT INTO persons( name,age,nationality) VALUES('Maria Nedelcu',25,'american');
 INSERT INTO persons( name,age,nationality) VALUES('Ioana Nicu',70,'romanian');
+INSERT INTO persons( name,age,nationality) VALUES('Vasile Minar',78,'french');

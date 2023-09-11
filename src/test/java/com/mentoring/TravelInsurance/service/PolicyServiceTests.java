@@ -1,8 +1,7 @@
 package com.mentoring.TravelInsurance.service;
 
 import com.mentoring.TravelInsurance.controller.Setup;
-import com.mentoring.TravelInsurance.dao.PolicyRepository;
-import com.mentoring.TravelInsurance.mappers.PolicyMapperImpl;
+import com.mentoring.TravelInsurance.repository.PolicyRepository;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
@@ -15,14 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -34,8 +35,6 @@ public class PolicyServiceTests {
     PolicyRepository policyRepository;
     @InjectMocks
     private PolicyServiceIml policyServiceIml;
-    @SpyBean
-    private PolicyMapperImpl policyMapper;
     private static Policy policy, policy1, policy2;
     private static Person person, person1, person2;
     private List<Policy> policyList;
@@ -55,47 +54,59 @@ public class PolicyServiceTests {
     }
 
     @Test
-    public void shouldReturnAllPersons() {
+    public void shouldReturnAllPolicies() {
         policyList = List.of(policy, policy1, policy2);
-
         given(policyRepository.findAll()).willReturn(policyList);
-
         List <Policy> expected = policyServiceIml.findAll();
-
         assertEquals(expected, policyList);
         verify(policyRepository, times(1)).findAll();
     }
     @Test
-    void whenGetAllPersonsReturnEmptyList() {
-        //Lenient stubs bypass “strict stubbing” validation rules. Avoid stubbing problems, such as the unnecessary stubbing described earlier.
-        lenient().when(policyRepository.findAll()).thenReturn(policyList);
+    void whenGetAllPoliciesReturnEmptyList() {
+        when(policyRepository.findAll()).thenReturn(policyList);
         assertThat(policyServiceIml.findAll()).isEqualTo(policyList);
     }
 
     @Test
-    public void whenSavePerson_shouldReturnPerson() {
+    public void shouldReturnPolicyFindById() {
+        Policy policy = policy1;
+        policy.setId(2);
+        when(policyRepository.findById(policy.getId())).thenReturn(Optional.of(policy));
+        Policy expected = policyServiceIml.findById(2);
+        assertEquals(expected, policy);
+        verify(policyRepository, times(1)).findById(2);
+    }
+    @Test
+    public void whenSavePoliciy_shouldReturnPolicy() {
         Policy policy = policy1;
         when(policyRepository.save(ArgumentMatchers.any(Policy.class))).thenReturn(policy);
         Policy created = policyServiceIml.save(policy);
         assertThat(created.getId()).isSameAs(policy.getId());
         verify(policyRepository).save(policy);
     }
-
     @Test
-    public void whenGivenId_shouldDeletePerson_ifFound(){
+    public void whenGivenId_shouldDeletePolicy_ifFound(){
         var policy = policy1;
         policy.setId(2);
-        lenient().when(policyRepository.findById(policy.getId())).thenReturn(Optional.of(policy));
+        when(policyRepository.findById(policy.getId())).thenReturn(Optional.of(policy));
         policyServiceIml.deleteById(policy.getId());
        verify(policyRepository).findById(policy.getId());
     }
     @Test
-    public void whenUpdatePerson_shouldUpdatePerson_ifFound() {
+    public void whenUpdatePolicy_shouldUpdatePolicy_ifFound() {
         var policy = policy1;
         policy.setId(2);
         lenient().when(policyRepository.findById(policy.getId())).thenReturn(Optional.of(policy));
         policyServiceIml.save(policy);
         verify(policyRepository).save(policy);
+    }
+
+    @Test
+    public void testExportExcel() {
+        policyList = List.of(policy, policy1, policy2);
+        Mockito.when(policyRepository.findAll()).thenReturn(policyList);
+        ByteArrayInputStream in = policyServiceIml.exportExcel();
+        assertNotNull(in);
     }
 }
 

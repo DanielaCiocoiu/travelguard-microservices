@@ -4,7 +4,6 @@ import com.mentoring.TravelInsurance.model.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface PersonService {
@@ -23,5 +22,4 @@ public interface PersonService {
 
     List<Person> findPersonsByNationality(String nationality, Pageable pageable);
 
-    ByteArrayInputStream exportExcel();
-}
+   }

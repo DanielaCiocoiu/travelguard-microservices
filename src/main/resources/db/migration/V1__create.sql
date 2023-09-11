@@ -16,3 +16,5 @@ CREATE TABLE policies (
   price double NOT NULL,
   id_person varchar,
   PRIMARY KEY (id));
+
+ALTER TABLE persons ADD CONSTRAINT FK_PERSONS_ON_ID FOREIGN KEY (id) REFERENCES policies (id);

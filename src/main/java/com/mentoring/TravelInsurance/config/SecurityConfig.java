@@ -9,36 +9,38 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return encoder;
     }
-
     @Bean
     public UserDetailsManager userDetailsManager() {
         final UserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
         final UserDetails user1 = User.withUsername("Laura")
-                .password(bCryptPasswordEncoder().encode("Laura"))
+                .password(passwordEncoder().encode("Laura"))
                 .roles("ANALYST")
                 .authorities("READ_AUTHORITY")
                 .build();
         final UserDetails user2 = User.withUsername("Maia")
-                .password(bCryptPasswordEncoder().encode("Maia"))
+                .password(passwordEncoder().encode("Maia"))
                 .roles("ADMIN")
                 .authorities("READ_AUTHORITY", "WRITE_AUTHORITY", "UPDATE_AUTHORITY")
                 .build();
 
         final UserDetails user3 = User.withUsername("Dana")
-                .password(bCryptPasswordEncoder().encode("Dana"))
+                .password(passwordEncoder().encode("Dana"))
                 .roles("ADMIN")
                 .authorities("READ_AUTHORITY", "WRITE_AUTHORITY", "UPDATE_AUTHORITY", "DELETE_AUTHORITY")
                 .build();
@@ -52,36 +54,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+                .headers(
+                        headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests((requests) -> requests
+                .authorizeHttpRequests(
+                        (requests) -> requests
                         .anyRequest()
-                        .authenticated())
+                        .authenticated()
+                )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
 
-/*
     // Defines options for customizing or adding to the default Spring MVC configuration
     @Bean
     WebMvcConfigurer webMvcConfigurer(){
         return  new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                      //  .allowedOrigins("http://192.....:8081")
-                        .allowedMethods("GET", "POST", "PUT")
-                        .allowedHeaders("Content-Type", "X-CSRF-TOKEN")
+                registry.addMapping("/RestTemplate/getAllPolicies")
+                        .allowedOrigins("http://localhost:8080")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("Content-Type", "X-CSRF-TOKEN", "X-API-Auth")
                         .allowedHeaders("X-CSRF-TOKEN")
                         .allowCredentials(true)
                         .maxAge(0);
             }
         };
     }
-*/
-
 
 }

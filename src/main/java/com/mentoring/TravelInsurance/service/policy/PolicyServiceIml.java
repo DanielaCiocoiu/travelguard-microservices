@@ -1,12 +1,13 @@
 package com.mentoring.TravelInsurance.service.policy;
 
-import com.mentoring.TravelInsurance.dao.PolicyRepository;
+import com.mentoring.TravelInsurance.repository.PolicyRepository;
 import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -76,5 +77,12 @@ public class PolicyServiceIml implements PolicyService {
         return policyRepository.findAll()
                 .stream()
                 .collect(Collectors.groupingBy(Policy::getType, Collectors.counting()));
+    }
+    @Override
+    public ByteArrayInputStream exportExcel() {
+        List<Policy> personList = policyRepository.findAll();
+        PolicyExcel policyExcel = new PolicyExcel();
+        ByteArrayInputStream in = policyExcel.tutorialsToExcel(personList);
+        return in;
     }
 }
