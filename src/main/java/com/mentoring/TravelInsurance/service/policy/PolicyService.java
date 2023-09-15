@@ -1,7 +1,9 @@
 package com.mentoring.TravelInsurance.service.policy;
 
+import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
+import org.springframework.data.domain.Pageable;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
@@ -26,4 +28,6 @@ public interface PolicyService {
     List<Policy> findPolicyByPriceBefore(double limit);
 
     ByteArrayInputStream exportExcel();
+
+    Iterable<Policy> getPoliciesInPages(Pageable pageable);
 }

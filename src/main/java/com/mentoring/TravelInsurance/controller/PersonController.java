@@ -3,7 +3,13 @@ package com.mentoring.TravelInsurance.controller;
 import com.mentoring.TravelInsurance.dto.PersonDto;
 import com.mentoring.TravelInsurance.mappers.PersonMapper;
 import com.mentoring.TravelInsurance.model.Person;
+import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.service.person.PersonService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +34,7 @@ public class PersonController {
         this.personService = personService;
         this.personMapper = personMapper;
     }
-
+    @Operation(summary = "Get all persons")
     @GetMapping("/persons")
     public ResponseEntity<List<PersonDto>> findAll() {
         List<Person> personList = personService.findAll();
@@ -36,14 +42,22 @@ public class PersonController {
         logger.info("List of person + " + (long) personDtoList.size());
         return new ResponseEntity<>(personDtoList, HttpStatus.OK);
     }
-
+    @Operation(summary = "Get a persons by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the person",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Policy.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Person not found",
+                    content = @Content)})
     @GetMapping("/person/{id}")
     public ResponseEntity<PersonDto> getPersonId(@PathVariable int id) {
         PersonDto personDto = personMapper.toDto(personService.findById(id));
         personService.findById(personDto.getId());
         return new ResponseEntity<>(personDto, HttpStatus.OK);
     }
-
+    @Operation(summary = "Create a person")
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto addNewPerson(@Valid @RequestBody PersonDto personDto) {
@@ -53,7 +67,7 @@ public class PersonController {
         logger.info("Created new person {}", personSaved);
         return personMapper.toDto(personSaved);
     }
-
+    @Operation(summary = "Update a person")
     @PutMapping("/person")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto savePerson(@RequestBody PersonDto personDto) {
@@ -62,7 +76,7 @@ public class PersonController {
         logger.info("Created new person {}", personSaved);
         return personMapper.toDto(personSaved);
     }
-
+    @Operation(summary = "Delete a person")
     @DeleteMapping("/person/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deletePerson(@PathVariable(value = "id") int id) {
@@ -90,19 +104,21 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @Operation(summary = "Get all persons sorted alphabetically")
     @GetMapping("/persons/sort")
     public Iterable<Person> getPersonsSortedAlphabetically() {
         return personService.getPersonsSortedAlphabetically(Sort.by("name").ascending());
     }
 
     //http://localhost:8080/api/persons/page?page=0&size=2
+    @Operation(summary = "Get all persons in pages")
     @GetMapping("/persons/page")
     public Iterable<Person> getPersonsInPages(@RequestParam int page, @RequestParam int size) {
         return personService.getPersonsInPages(PageRequest.of(page, size));
     }
 
     //http://localhost:8080/api/nationality/romana?page=0&size=2
+    @Operation(summary = "Get persons paginated and sorted by nationality")
     @GetMapping("/nationality/{nationality}")
     public List<Person> findPersonsByNationality(@PathVariable String nationality, @RequestParam int page, @RequestParam int size) {
         final Sort sort = Sort.by("name").ascending();

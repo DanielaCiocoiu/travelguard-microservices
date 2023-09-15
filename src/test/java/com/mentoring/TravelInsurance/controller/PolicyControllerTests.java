@@ -21,11 +21,11 @@ import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,6 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-@WebMvcTest(value = PolicyController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = PolicyController.class)
 public class PolicyControllerTests {
     private static final Logger logger
             = LoggerFactory.getLogger(PolicyControllerTests.class);
@@ -108,7 +109,7 @@ public class PolicyControllerTests {
                 .willReturn(policyList);
 
         logger.info(policyList.toString());
-        MvcResult mvcResult = mockMvc.perform(get("/api/policies")
+        MvcResult mvcResult = mockMvc.perform(get("/api/policies").with(user("Dana").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -120,6 +121,7 @@ public class PolicyControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
     public void whenGetMethodListPolicyById() throws Exception {
         Policy policy3 = policy;
         policy3.setId(1);
@@ -134,21 +136,23 @@ public class PolicyControllerTests {
     @Test
     public void whenGetPolicies_NoPoliciesReturn() throws Exception {
         when(policyService.findAll()).thenReturn(policyList);
-        mockMvc.perform(get("/api/policies")
+        mockMvc.perform(get("/api/policies").with(user("Dana").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
     @Test
-    public void testDeleteShouldReturn404NotFound() throws Exception {
+    @WithMockUser(username = "Laura", password = "Laura", roles = {"ANALYST"})
+    public void testDeleteShouldReturnIsForbidden() throws Exception {
         int  id = 1111;
             Mockito.doThrow(PolicyNotFoundException.class).when(policyService).deleteById(id);
         mockMvc.perform(delete("/policy/" + id))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isForbidden())
                 .andDo(print());
     }
 
     @Test
+    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
     public void testDownloadFile() throws Exception {
         List<Policy> people = new ArrayList<>();
         people.add(policy2);

@@ -8,12 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "persons")
-@Getter
-@Setter
-@ToString
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Person {
 
     @Id
@@ -36,6 +31,48 @@ public class Person {
     @Column(name = "nationality")
     private String nationality;
 
+    public Person(int id, String name, Integer age, String nationality) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.nationality = nationality;
+    }
+
+    public Person() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,6 +83,16 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, age, nationality);
+        return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Person{ " +
+                "id= " + id +
+                ", name=' " + name + '\'' +
+                ", age= " + age +
+                ", nationality=' " + nationality + '\'' +
+                '}';
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -49,22 +51,22 @@ public class SecurityConfig {
         userDetailsManager.createUser(user3);
         return userDetailsManager;
     }
-
-    //customized cors
+      @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .authorizeHttpRequests((requests) -> requests
+                                // allow CORS option calls for Swagger UI
+                                .requestMatchers(antMatcher("/openapi/openapi.yml")).hasRole("ADMIN")
+                                .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                                .anyRequest().authenticated()
+                )
                 .headers(
                         headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(
-                        (requests) -> requests
-                        .anyRequest()
-                        .authenticated()
-                )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

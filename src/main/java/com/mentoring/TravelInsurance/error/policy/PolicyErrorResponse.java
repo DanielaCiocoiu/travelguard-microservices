@@ -1,28 +1,45 @@
 package com.mentoring.TravelInsurance.error.policy;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
-import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class PolicyErrorResponse {
 
     private HttpStatus status;
     private String message;
-    private long timestamp;
-    private List<String> errors;
 
-    public PolicyErrorResponse(HttpStatus status, String message, String error) {
+    public PolicyErrorResponse() {
+    }
+
+    public PolicyErrorResponse(HttpStatus status, String message ) {
         super();
         this.status = status;
         this.message = message;
-        errors = Arrays.asList(error);
+
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(HttpStatus status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "PolicyErrorResponse{" +
+                "status=" + status +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

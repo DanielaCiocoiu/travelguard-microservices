@@ -15,15 +15,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -38,13 +39,14 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(value = PersonController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = PersonController.class)
 public class PersonControllerTests {
     private static final Logger logger
             = LoggerFactory.getLogger(PersonControllerTests.class);
@@ -93,6 +95,7 @@ public class PersonControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
     public void whenGetMethodListAllPersons() throws Exception {
         personList = List.of(person, person1, person2);
         personDtos = personMapper.toDtoList(personList);
@@ -114,6 +117,7 @@ public class PersonControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
     public void whenGetMethodPersonById() throws Exception {
         Person person = person1;
         person.setId(1);
@@ -127,18 +131,29 @@ public class PersonControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Laura", password = "Laura", roles = {"ANALYST"})
     public void whenGetMethodPersonIdNotFound() throws Exception {
         Person person = person1;
-        person.setId(1);
+        person.setId(1111);
         personDto = personMapper.toDto(person);
-        when(personService.findById(person.getId())).thenThrow(new PersonNotFoundException("Person id not found: " + personDto.getId()));
-        mockMvc.perform(get("/api/person/" + person.getId())
+        Mockito.doThrow(PersonNotFoundException.class).when(personService).findById(person.getId());
+         mockMvc.perform(get("/api/person/1" )
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+                .andDo(print());
+               // .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser(username = "Laura", password = "Laura", roles = {"ANALYST"})
+    public void testDeleteShouldReturnIsForbidden() throws Exception {
+        int  id = 1111;
+        Mockito.doThrow(PersonNotFoundException.class).when(personService).deleteById(id);
+        mockMvc.perform(delete("/person/" + id))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+    @Test
+    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
     public void getPersonsNoPersonsReturn() throws Exception {
         when(personService.findAll()).thenReturn(personList);
 

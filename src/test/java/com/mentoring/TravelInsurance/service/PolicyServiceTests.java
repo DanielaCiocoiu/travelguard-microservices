@@ -1,11 +1,11 @@
 package com.mentoring.TravelInsurance.service;
 
 import com.mentoring.TravelInsurance.controller.Setup;
-import com.mentoring.TravelInsurance.repository.PolicyRepository;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
+import com.mentoring.TravelInsurance.repository.PolicyRepository;
 import com.mentoring.TravelInsurance.service.policy.PolicyServiceIml;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

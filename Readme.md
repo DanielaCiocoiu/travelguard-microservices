@@ -1,16 +1,54 @@
 Travel-insurance application
 
+
+
+Travel_Insurance
+
+Travel_Insurance it is a REST API which exposes endpoints for each use case, using  Spring Boot,  
+a microservice that handle CRUD operations for managing Travel Insurance policies. 
+The project it is set up with Maven, Java 17, Spring Boot 3.1.2., Flyway Community Edition 9, Swagger.
+Microservice is based on policy model which has following: id, eligibility, validity, type, benefitAndLimit, price and a list of persons. 
+Type and benefits are enums:
+BenefitAndLimit 
+    ACCIDENT_RISK, LAISURE_ACTIVITIES, SPORTS, HAZARDOUS_WORK;
+Type 
+    VISITOR_INSURANCE, SCHENGEN_INSURANCE, GROUP_TRAVEL_INSURANCE,
+    INTERNATIONAL_TRAVEL_INSURANCE, WORLDWIDE_HEALTH_INSURANCE,
+    BUSINESS_TRAVEL_INSURANCE,MULTI_TRIP_INSURANCE,
+    MISSIONARY_INSURANCE, PRE_EXISTING_CONDITION_INSURANCE;
+
+The second model is Persons with following attribute: id; name, age, nationality.
+
+Some attributes are using Java Bean Validation with Hibernate Validator
+For name: 
+@NotBlank
+@Size(max = 20, message = "First name should have with maximum length of 200 characters")
+
+Age
+@Positive
+@NotNull(message = "Age must not be null")
+@Min(value = 18, message = "Age must be greater than or equal to 18")
+@Max(value = 60, message = "Age must be less than or equal to 60")
+
+
+The app uses Spring Data Jpa to store data in a relational database H2, using Flyway versioning tool which keeps track of all changes to database. 
+
+App is based on one-to-many unidirectional mapping using JPA annotations, which means one policy can have many persons.
+
+The application provide implementation for the following use cases:
+
 - [Features](#features)
     - [Policy](#policy)
-      - [Person](#person)
-        - [RestTemplate](#personRestTemplate)
-
+        - [Person](#person)
+            - [RestTemplate](#personRestTemplate)
+             
 ## Features
 
 ### Policy
 
+
 | Operation |         Description          |                         Example | Request body |
-|-----------|:----------------------------:|--------------------------------:|--:|
+|-----------|:----------------------------:|--------------------------------:|-------------:|
 | GET       |       Get all policies       |     localhost:8080/api/policies |            - |
 | GET       |      Get a policy by id      |     localhost:8080/api/policy/1 |            - |
 | GET       |   Get all policies by type   |       localhost:8080/api/type   |            - |
@@ -44,4 +82,38 @@ Travel-insurance application
 | POST      |         Create a person         |       localhost:8080/RestTemplate/addPolicy |       Policy |
 | PUT       |         Update a person         |    localhost:8080/RestTemplate/updatePolicy |       Policy |
 | DELETE    |         Delete a person         |  localhost:8080/RestTemplate/deletePolicy/1 |            - |
+
+
+Spring-aspects: some advices before and after Policy service methods
+Dto objects with MapStruct library that generate bean mapper classes automatically.
+Error handler for both policy and person models.
+SecurityConfig with UserDetailsService, PasswordEncoder, SecurityFilterChain and @CrossOrigin enabled
+Rest Template client which consumes endpoints from Travel_Insurance.
+
+Swagger Open Api and Postman, For execute Crud operations and document requests 
+
+
+{
+    "id": 21,
+    "eligibility": 1,
+    "validity": true,
+    "type": "VISITOR_INSURANCE",
+    "benefitAndLimit": "ACCIDENT_RISK",
+    "price": 50.0,
+    "personList": [
+        {
+            "id": 21,
+            "name": "Ana Ion",
+            "age": 23,
+            "nationality": "romanian"
+        }
+    ]
+}
+
+
+
+
+
+
+
 

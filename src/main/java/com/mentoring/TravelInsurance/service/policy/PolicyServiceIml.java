@@ -1,10 +1,12 @@
 package com.mentoring.TravelInsurance.service.policy;
 
+import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.repository.PolicyRepository;
 import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.model.Person;
 import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -18,9 +20,12 @@ import java.util.stream.Collectors;
 public class PolicyServiceIml implements PolicyService {
 
     private final PolicyRepository policyRepository;
+    private final PersonRepository personRepository;
 
-    public PolicyServiceIml(PolicyRepository policyRepository) {
+    public PolicyServiceIml(PolicyRepository policyRepository,
+                            PersonRepository personRepository) {
         this.policyRepository = policyRepository;
+        this.personRepository = personRepository;
     }
     @Override
     public List<Policy> findAll() {
@@ -52,8 +57,8 @@ public class PolicyServiceIml implements PolicyService {
     }
 
     @Override
-    public List<Policy> findPolicyByPriceBefore(double limit) {
-       return policyRepository.findPolicyByPriceBefore(limit);
+    public List<Policy> findPolicyByPriceBefore(double price) {
+       return policyRepository.findPolicyByPriceBefore(price);
     }
 
     @Override
@@ -84,5 +89,10 @@ public class PolicyServiceIml implements PolicyService {
         PolicyExcel policyExcel = new PolicyExcel();
         ByteArrayInputStream in = policyExcel.tutorialsToExcel(personList);
         return in;
+    }
+
+    @Override
+    public Iterable<Policy> getPoliciesInPages(Pageable pageable) {
+        return policyRepository.findAll(pageable).getContent();
     }
 }

@@ -19,9 +19,8 @@ public class RestTemplateService {
     RestTemplateRepository restTemplateRepository;
     RestTemplate restTemplate;
     private static final String get_All_Policies_URL = "http://localhost:8080/api/policies";
-    private static final String create_Policy_URL = "http://localhost:8080/api/policy";
+    private static final String create_or_update_Policy_URL = "http://localhost:8080/api/policy";
     private static final String get_Policy_By_id_URL = "http://localhost:8080/api/policy/{id}";
-    private static final String update_Policy_By_id_URL = "http://localhost:8080/api/policy";
     private static final String delete_Policy_By_id_URL = "http://localhost:8080/api/policy/{id}";
     HttpEntity<String> entity = new HttpEntity<>("parameters", createHeaders());
 
@@ -54,11 +53,11 @@ public class RestTemplateService {
     }
 
     public ResponseEntity<Policy> createPolicy(Policy policy) {
-        return restTemplate.postForEntity(create_Policy_URL, policy, Policy.class, entity);
+        return restTemplate.postForEntity(create_or_update_Policy_URL, policy, Policy.class, entity);
     }
 
     public void updatePolicy(Policy policy) {
-        restTemplate.put(update_Policy_By_id_URL, policy, entity);
+        restTemplate.put(create_or_update_Policy_URL, policy, entity);
     }
 
     public void deletePolicyById(int id) {

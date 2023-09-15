@@ -1,9 +1,9 @@
 package com.mentoring.TravelInsurance.service;
 
 import com.mentoring.TravelInsurance.controller.Setup;
-import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.mappers.PersonMapperImpl;
 import com.mentoring.TravelInsurance.model.Person;
+import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.service.person.PersonServiceIml;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

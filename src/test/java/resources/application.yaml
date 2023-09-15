@@ -13,9 +13,7 @@
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       show-sql: "true"
       ddl-auto: none
-    h2: null
-    console:
-      enabled: "true"
+
   datasource:
     username: sa
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=LEGACY;DB_CLOSE_ON_EXIT=FALSE
