@@ -17,19 +17,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/api")
 public class PolicyController {
@@ -45,6 +47,7 @@ public class PolicyController {
     }
 
     @Operation(summary = "Retrieve all policies")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/policies")
     public ResponseEntity<List<PolicyDto>> findAll() {
         List<Policy> policyList = policyService.findAll();
@@ -65,19 +68,21 @@ public class PolicyController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Policy not found",
                     content = @Content)})
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/policy/{policyId}")
     public ResponseEntity<PolicyDto> getPolicy(@Parameter(description = "id of policy to be searched")
                                                @PathVariable int policyId) {
         Policy policy = policyService.findById(policyId);
         PolicyDto policyDto = policyMapper.toDto(policy);
-        policyService.findById(policyDto.getId());
+        policyService.findById(policyDto.getPolicyId());
         return new ResponseEntity<>(policyDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Create a policy")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @PostMapping("/policy")
     public ResponseEntity<PolicyDto> addPolicy(@Valid @RequestBody PolicyDto policyDto) {
-        policyDto.setId(0);
+        policyDto.setPolicyId(0);
         Policy policyToBeSaved = policyMapper.toEntity(policyDto);
         Policy policySaved = policyService.save(policyToBeSaved);
         logger.info("Created new policy {}", policySaved);
@@ -87,6 +92,7 @@ public class PolicyController {
 
     @Operation(summary = "Update a policy")
     @PutMapping("/policy")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public PolicyDto savePolicy(@RequestBody PolicyDto policyDto) {
         Policy policyToBeSaved = policyMapper.toEntity(policyDto);
@@ -97,16 +103,18 @@ public class PolicyController {
 
     @Operation(summary = "Delete a policy")
     @DeleteMapping("/policy/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deletePolicy(@PathVariable(value = "id") int id) {
         PolicyDto personDto = policyMapper.toDto(policyService.findById(id));
-        policyService.deleteById(personDto.getId());
+        policyService.deleteById(personDto.getPolicyId());
         logger.info("Deleted policy with id: + " + id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //http://localhost:8080/api/type
     @Operation(summary = "Get all policies by type")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/type")
     public ResponseEntity<Map<Type, Long>> findAllPoliciesByType() {
         Map<Type, Long> result = policyService.findAllByType();
@@ -116,6 +124,7 @@ public class PolicyController {
 
     //http://localhost:8080/api/policies/price/50.0
     @Operation(summary = "Get all policies by price")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/policies/price/{price}")
     public List<Policy> findPolicyByPriceBefore(@PathVariable double price) {
         return policyService.findPolicyByPriceBefore(price);
@@ -123,14 +132,16 @@ public class PolicyController {
 
     //http://localhost:8080/api/validity
     @Operation(summary = "Get all policies by validity")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/validity")
     public ResponseEntity<List<PolicyDto>> findAllPoliciesValidity() {
         List<PolicyDto> policyDtoList = policyMapper.toDtoList(policyService.findAllByValidity());
-        logger.info("List of all policies by validity: " + policyDtoList.stream().count());
+        logger.info("List of all policies by validity: " + (long) policyDtoList.size());
         return new ResponseEntity<>(policyDtoList, HttpStatus.OK);
     }
 
     //http://localhost:8080/api/policy/9/250
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @PatchMapping("/policy/{id}/{price}")
     public ResponseEntity<Policy> updatePolicyPrice(@PathVariable int id, @PathVariable Double price) {
         var thePolicy = policyService.findAll()
@@ -148,6 +159,7 @@ public class PolicyController {
     }
 
     @Operation(summary = "Export all policies to excel")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/exportToExcel")
     public ResponseEntity<Resource> getExportToExcel() {
         InputStreamResource file = new InputStreamResource(policyService.exportExcel());
@@ -161,9 +173,29 @@ public class PolicyController {
 
     //http://localhost:8080/api/policies/page?page=0&size=2
     @Operation(summary = "Get all policies by page")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/policies/page")
     public Iterable<Policy> getPersonsInPages(@RequestParam int page, @RequestParam int size) {
         return policyService.getPoliciesInPages(PageRequest.of(page, size));
     }
 
+    // http://localhost:8080/api/numberOfPoliciesByEachPerson/2023-01-12/2023-12-15
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @GetMapping("/numberOfPoliciesByEachPerson/{firstDate}/{lastDate}")
+    public ResponseEntity<Map<Integer, Map<LocalDate, Integer>>> getReportNumberOfPoliciesMadeByEachPerson(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate firstDate,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastDate) {
+        return new ResponseEntity<>(policyService.getNumberOfPoliciesMadeByEachPersonEachMonthInGivenTimeInterval(firstDate, lastDate),
+                HttpStatus.OK);
+    }
+//http://localhost:8080/api/numberOfPoliciesByPersonId/2/2023-01-12/2023-12-15
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @GetMapping("/numberOfPoliciesByPersonId/{personId}/{firstDate}/{lastDate}")
+    public ResponseEntity<Map<LocalDate, Integer>> getNumberOfPoliciesMadeByEachPersonEachMonthInGivenTimeIntervalByPersonId(
+            @PathVariable Integer personId,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate firstDate,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastDate) {
+        return new ResponseEntity<>(policyService.getNumberOfPoliciesMadeByEachPersonEachMonthInGivenTimeIntervalByPersonId(firstDate, lastDate, personId),
+                HttpStatus.OK);
+    }
 }

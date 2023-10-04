@@ -18,10 +18,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:8080")
+
 @RestController
 @RequestMapping("/api")
 public class PersonController {
@@ -35,11 +36,14 @@ public class PersonController {
         this.personMapper = personMapper;
     }
     @Operation(summary = "Get all persons")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/persons")
     public ResponseEntity<List<PersonDto>> findAll() {
         List<Person> personList = personService.findAll();
         List<PersonDto> personDtoList = personMapper.toDtoList(personList);
-        logger.info("List of person + " + (long) personDtoList.size());
+        if (personDtoList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(personDtoList, HttpStatus.OK);
     }
     @Operation(summary = "Get a persons by its id")
@@ -52,14 +56,16 @@ public class PersonController {
             @ApiResponse(responseCode = "404", description = "Person not found",
                     content = @Content)})
     @GetMapping("/person/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<PersonDto> getPersonId(@PathVariable int id) {
-        PersonDto personDto = personMapper.toDto(personService.findById(id));
-        personService.findById(personDto.getId());
+        Person person = personService.findById(id);
+        PersonDto personDto = personMapper.toDto(person);
         return new ResponseEntity<>(personDto, HttpStatus.OK);
     }
     @Operation(summary = "Create a person")
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public PersonDto addNewPerson(@Valid @RequestBody PersonDto personDto) {
         personDto.setId(0);
         Person personToBeSaved = personMapper.toEntity(personDto);
@@ -70,6 +76,7 @@ public class PersonController {
     @Operation(summary = "Update a person")
     @PutMapping("/person")
     @ResponseStatus(HttpStatus.OK)
+   @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public PersonDto savePerson(@RequestBody PersonDto personDto) {
         Person personToBeSaved = personMapper.toEntity(personDto);
         Person personSaved = personService.save(personToBeSaved);
@@ -79,6 +86,7 @@ public class PersonController {
     @Operation(summary = "Delete a person")
     @DeleteMapping("/person/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<String> deletePerson(@PathVariable(value = "id") int id) {
         PersonDto personDto = personMapper.toDto(personService.findById(id));
         personService.deleteById(personDto.getId());
@@ -88,6 +96,7 @@ public class PersonController {
 
     //http://localhost:8080/api/persons/9/Ilinca
     @PatchMapping("/persons/{id}/{name}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Person> updatePersonName(@PathVariable int id, @PathVariable String name) {
         var thePerson = personService.findAll()
                 .stream()
@@ -105,6 +114,7 @@ public class PersonController {
         }
     }
     @Operation(summary = "Get all persons sorted alphabetically")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/persons/sort")
     public Iterable<Person> getPersonsSortedAlphabetically() {
         return personService.getPersonsSortedAlphabetically(Sort.by("name").ascending());
@@ -112,6 +122,7 @@ public class PersonController {
 
     //http://localhost:8080/api/persons/page?page=0&size=2
     @Operation(summary = "Get all persons in pages")
+   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/persons/page")
     public Iterable<Person> getPersonsInPages(@RequestParam int page, @RequestParam int size) {
         return personService.getPersonsInPages(PageRequest.of(page, size));
@@ -119,6 +130,7 @@ public class PersonController {
 
     //http://localhost:8080/api/nationality/romana?page=0&size=2
     @Operation(summary = "Get persons paginated and sorted by nationality")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("/nationality/{nationality}")
     public List<Person> findPersonsByNationality(@PathVariable String nationality, @RequestParam int page, @RequestParam int size) {
         final Sort sort = Sort.by("name").ascending();

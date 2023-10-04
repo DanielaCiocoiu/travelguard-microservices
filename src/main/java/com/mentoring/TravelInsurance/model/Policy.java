@@ -1,9 +1,14 @@
 package com.mentoring.TravelInsurance.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +20,7 @@ public class Policy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private int id;
+    private Integer id;
 
     @Column(name = "eligibility")
     private int eligibility;
@@ -35,28 +40,65 @@ public class Policy {
     @Column(name = "price")
     private double price;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch=FetchType.EAGER, orphanRemoval=true)
+    @Column(name = "issue_date")
+    private LocalDateTime issueDate;
+
+    @Column(name = "last_day_coverage_period")
+    private LocalDateTime lastDayCoveragePeriod;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JsonIgnore
+    @JsonProperty("Person list: ")
     private List<Person> personList;
 
-    public Policy(int id, int eligibility, boolean validity, Type type, BenefitAndLimit benefitAndLimit, double price, List<Person> personList) {
+    @ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name="person_id", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    @JsonProperty("This policy was created for person with:  ")
+    private Person createdBy;
+
+    public Policy(int eligibility, boolean validity, Type type, BenefitAndLimit benefitAndLimit, double price, LocalDateTime issueDate, LocalDateTime lastDayCoveragePeriod, List<Person> personList, Person createdBy) {
+        this.eligibility = eligibility;
+        this.validity = validity;
+        this.type = type;
+        this.benefitAndLimit = benefitAndLimit;
+        this.price = price;
+        this.issueDate = issueDate;
+        this.lastDayCoveragePeriod = lastDayCoveragePeriod;
+        this.personList = personList;
+        this.createdBy = createdBy;
+    }
+
+    public Policy(Integer id, int eligibility, boolean validity, Type type, BenefitAndLimit benefitAndLimit, double price, LocalDateTime issueDate, LocalDateTime lastDayCoveragePeriod, List<Person> personList, Person createdBy) {
         this.id = id;
         this.eligibility = eligibility;
         this.validity = validity;
         this.type = type;
         this.benefitAndLimit = benefitAndLimit;
         this.price = price;
+        this.issueDate = issueDate;
+        this.lastDayCoveragePeriod = lastDayCoveragePeriod;
         this.personList = personList;
+        this.createdBy = createdBy;
+    }
+    public Person getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Person createdBy) {
+        this.createdBy = createdBy;
     }
 
     public Policy() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -100,6 +142,22 @@ public class Policy {
         this.price = price;
     }
 
+    public LocalDateTime getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(LocalDateTime issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public LocalDateTime getLastDayCoveragePeriod() {
+        return lastDayCoveragePeriod;
+    }
+
+    public void setLastDayCoveragePeriod(LocalDateTime lastDayCoveragePeriod) {
+        this.lastDayCoveragePeriod = lastDayCoveragePeriod;
+    }
+
     public List<Person> getPersonList() {
         return personList;
     }
@@ -113,24 +171,27 @@ public class Policy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Policy policy = (Policy) o;
-        return eligibility == policy.eligibility && validity == policy.validity && Double.compare(policy.price, price) == 0 && type == policy.type && benefitAndLimit == policy.benefitAndLimit && Objects.equals(personList, policy.personList);
+        return eligibility == policy.eligibility && validity == policy.validity && Double.compare(policy.price, price) == 0 && Objects.equals(id, policy.id) && type == policy.type && benefitAndLimit == policy.benefitAndLimit && Objects.equals(issueDate, policy.issueDate) && Objects.equals(lastDayCoveragePeriod, policy.lastDayCoveragePeriod) && Objects.equals(personList, policy.personList) && Objects.equals(createdBy, policy.createdBy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eligibility, validity, type, benefitAndLimit, price, personList);
+        return Objects.hash(id, eligibility, validity, type, benefitAndLimit, price, issueDate, lastDayCoveragePeriod, personList, createdBy);
     }
 
     @Override
     public String toString() {
-        return "Policy {" +
-                "id= " + id +
-                ", eligibility= " + eligibility +
-                ", validity= " + validity +
-                ", type= " + type +
-                ", benefitAndLimit= " + benefitAndLimit +
-                ", price= " + price +
-                ", personList= " + personList +
+        return "Policy{" +
+                "id=" + id +
+                ", eligibility=" + eligibility +
+                ", validity=" + validity +
+                ", type=" + type +
+                ", benefitAndLimit=" + benefitAndLimit +
+                ", price=" + price +
+                ", issueDate=" + issueDate +
+                ", lastDayCoveragePeriod=" + lastDayCoveragePeriod +
+                ", personList=" + personList +
+                ", createdBy=" + createdBy +
                 '}';
     }
 }

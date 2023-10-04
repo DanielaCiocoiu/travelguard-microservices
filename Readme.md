@@ -1,9 +1,5 @@
 Travel-insurance application
 
-
-
-Travel_Insurance
-
 Travel_Insurance it is a REST API which exposes endpoints for each use case, using  Spring Boot,  
 a microservice that handle CRUD operations for managing Travel Insurance policies. 
 The project it is set up with Maven, Java 17, Spring Boot 3.1.2., Flyway Community Edition 9, Swagger.
@@ -57,7 +53,7 @@ The application provide implementation for the following use cases:
 | PUT       |       Update a policy        |       localhost:8080/api/policy |       Policy |
 | PATCH     |  Update price for a policy   | localhost:8080/api/policy/9/250 |            - |
 | DELETE    |       Delete a policy        |    localhost:8080/api/policy/1/ |            - |
-| GET       |   Get persons export to excel|localhost:8080/api/exportToExcel |              |
+| GET       |   Get persons export to excel|localhost:8080/api/exportToExcel |            - |
 
 ### Person
 
@@ -87,11 +83,10 @@ The application provide implementation for the following use cases:
 Spring-aspects: some advices before and after Policy service methods
 Dto objects with MapStruct library that generate bean mapper classes automatically.
 Error handler for both policy and person models.
-SecurityConfig with UserDetailsService, PasswordEncoder, SecurityFilterChain and @CrossOrigin enabled
+
 Rest Template client which consumes endpoints from Travel_Insurance.
 
 Swagger Open Api and Postman, For execute Crud operations and document requests 
-
 
 {
     "id": 21,
@@ -110,10 +105,57 @@ Swagger Open Api and Postman, For execute Crud operations and document requests
     ]
 }
 
+SecurityConfig implement with Spring Boot JWT Authentication
+User can signup new account, or login with username & password.
+By User’s role (admin, moderator, user), we authorize the User to access resources
 
+INSERT INTO roles(name) VALUES('ROLE_USER');
+INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
+INSERT INTO users(username,email,password) VALUES('john', 'john@gmail.com','12345678');
+INSERT INTO users(username,email,password) VALUES('mary', 'mary@gmail.com','12345678');
+INSERT INTO users(username,email,password) VALUES('susan', 'susan@gmail.com','12345678');
 
+POST: http://localhost:8080/api/auth/signup
+{
+"username": "Vasia",
+"email": "Vasia@gmail.com",
+"password": "12345678",
+"role": ["admin"]
+}
 
+{
+"username": "Tom",
+"password": "12345678",
+"email": "Tom@gmail.com",
+"role": ["moderator"]
+}
+{
+"username": "Livia",
+"password": "12345678",
+"email": "Livia@gmail.com",
+"role": ["user"]
+}
 
+GET: http://localhost:8080/api/test/all
 
+GET: http://localhost:8080/api/test/user
 
+POST: http://localhost:8080/api/auth/signin
+{
+"username": "Vasia",
+"password": "12345678"
+}
+                        Response
+{
+"id": 1,
+"username": "Vasia",
+"email": "Vasia@gmail.com",
+"roles": [
+"ROLE_ADMIN"
+],
+"tokenType": "Bearer",
+"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWYXNpYSIsImlhdCI6MTY5NTI4MjIwOSwiZXhwIjoxNjk1MzY4NjA5fQ.IgyrMsIz3zgttouHP7FGVYJM3ILA_S7_NHEQzG-_MvM"
+}
+GET: http://localhost:8080/api/test/user with Bearer token.... 

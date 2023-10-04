@@ -1,12 +1,11 @@
 package com.mentoring.TravelInsurance.service.person;
 
-import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.error.person.PersonNotFoundException;
 import com.mentoring.TravelInsurance.error.person.PersonWrongAgeException;
 import com.mentoring.TravelInsurance.model.Person;
+import com.mentoring.TravelInsurance.repository.PersonRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class PersonServiceIml implements PersonService {
     }
 
     @Override
-    public Person findById(int theId) {
+    public Person findById(Integer theId) {
          return personRepository.findById(theId)
          .orElseThrow(() -> new PersonNotFoundException("Person id not found - " + theId));
     }
@@ -56,7 +55,7 @@ public class PersonServiceIml implements PersonService {
     }
 
     @Override
-    public Boolean deleteById(int theId) {
+    public Boolean deleteById(Integer theId) {
         Optional<Person> optionalPerson = personRepository.findById(theId);
         if (optionalPerson.isPresent()) {
             personRepository.delete(optionalPerson.get());
@@ -64,6 +63,4 @@ public class PersonServiceIml implements PersonService {
         }
          throw new PersonNotFoundException("Did not find person with Id: " + theId);
     }
-
-
 }

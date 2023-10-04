@@ -40,6 +40,17 @@ public class PolicyRestExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse,new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
+    // 401
+    @ExceptionHandler( UnauthorizedException.class)
+    @ResponseStatus(value=HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<PolicyErrorResponse> handleUNAUTHORIZED(final UnauthorizedException ex) {
+        PolicyErrorResponse errorResponse = new PolicyErrorResponse();
+        errorResponse.setStatus(HttpStatus.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse,new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
+
     // 409
     @ExceptionHandler({ InvalidDataAccessApiUsageException.class, DataAccessException.class })
     @ResponseStatus(HttpStatus.CONFLICT)

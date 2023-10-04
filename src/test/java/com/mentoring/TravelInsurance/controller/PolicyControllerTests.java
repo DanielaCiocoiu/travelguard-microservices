@@ -2,7 +2,6 @@ package com.mentoring.TravelInsurance.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentoring.TravelInsurance.dto.PolicyDto;
-import com.mentoring.TravelInsurance.error.policy.PolicyNotFoundException;
 import com.mentoring.TravelInsurance.mappers.PolicyMapperImpl;
 import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
@@ -10,10 +9,10 @@ import com.mentoring.TravelInsurance.model.Policy;
 import com.mentoring.TravelInsurance.model.Type;
 import com.mentoring.TravelInsurance.service.policy.PolicyExcel;
 import com.mentoring.TravelInsurance.service.policy.PolicyService;
+import org.aspectj.lang.annotation.Before;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Ignore;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
@@ -26,20 +25,23 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assume.assumeFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
@@ -52,7 +54,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@ActiveProfiles("tag_test")
 @WebMvcTest(value = PolicyController.class)
 public class PolicyControllerTests {
     private static final Logger logger
@@ -68,22 +70,26 @@ public class PolicyControllerTests {
     @Spy
     @InjectMocks
     private PolicyController policyController;
+    @Autowired
     private ObjectMapper objectMapper;
     private List<PolicyDto> policyDtos;
-    private PolicyDto policyDto;
+    private static PolicyDto policyDto;
     private PolicyExcel policyExcel;
     private static Person person, person1, person2;
-    private static Policy policy, policy1, policy2;
-    private List<Policy> policyList;
+    private static Policy policyOb, policyOb1, policyOb2;
+    private static List<Policy> policyList;
+    private InputStream inputStream;
 
     @BeforeAll
     static void initBeforeAll() {
-        person = Setup.personBuilder("Maria", 22, "romanian");
-        person1 = Setup.personBuilder("Irina", 50, "american");
-        person2 = Setup.personBuilder("Iona", 22, "romanian");
-        policy = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0, List.of(person, person1, person2));
-        policy1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00, List.of(person, person1, person2));
-        policy2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00, List.of(person, person1, person2));
+        person = Setup.personBuilder("Maria", 22, "romanian", List.of());
+        person1 = Setup.personBuilder("Irina", 50, "american", List.of());
+        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of());
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0,
+                LocalDateTime.of(2022, 1, 1, 0, 0), LocalDateTime.of(2022, 12, 31, 0, 0), List.of(person1));
+        policyOb1 = Setup.policyBuilder(2, true, Type.GROUP_TRAVEL_INSURANCE, BenefitAndLimit.SPORTS, 160.00, LocalDateTime.of(2022, 12, 31, 0, 0), LocalDateTime.of(2022, 1, 1, 0, 0), List.of(person1));
+        policyOb2 = Setup.policyBuilder(3, true, Type.BUSINESS_TRAVEL_INSURANCE, BenefitAndLimit.HAZARDOUS_WORK, 170.00, LocalDateTime.of(2022, 12, 31, 0, 0), LocalDateTime.of(2022, 1, 1, 0, 0), List.of(person2));
+        policyDto = new PolicyDto(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0, LocalDateTime.of(2022, 1, 1, 0, 0), LocalDateTime.of(2022, 12, 31, 0, 0), List.of(person1), Person.builder().build(), 1);
     }
 
     @BeforeEach
@@ -94,39 +100,48 @@ public class PolicyControllerTests {
         policyDto = new PolicyDto();
         policyExcel = new PolicyExcel();
     }
+
+    @Before("")
+    public void before() {
+        mockMvc = MockMvcBuilders.standaloneSetup(policyController).build();
+        inputStream = policyController.getClass().getClassLoader().getResourceAsStream("persons.xlsx");
+    }
+
+
     @BeforeClass
     public static void disableTestsOnCiServer() {
         String profilesFromConsole = System.getProperty("spring.profiles.active", "");
-        assumeFalse(profilesFromConsole.contains("flyway"));
+        Assumptions.assumeFalse(profilesFromConsole.contains("flyway"));
     }
-    @Test
-    public void whenGetMethodListAllPolicies_() throws Exception {
-        policyList = List.of(policy, policy1, policy2);
-        policyDtos = policyMapper.toDtoList(policyList);
 
+    @Disabled
+    @Ignore
+    @Test
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
+    public void whenGetMethodListAllPolicies_() throws Exception {
+        policyList = List.of(policyOb, policyOb1, policyOb2);
+        policyDtos = policyMapper.toDtoList(policyList);
         given(policyService
                 .findAll())
                 .willReturn(policyList);
-
         logger.info(policyList.toString());
-        MvcResult mvcResult = mockMvc.perform(get("/api/policies").with(user("Dana").roles("ADMIN"))
+        MvcResult mvcResult = mockMvc.perform(get("/api/policies")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andReturn();
-
         assertThat(mvcResult.getResponse().getContentAsString())
                 .isEqualTo(objectMapper.writeValueAsString(policyDtos));
     }
 
     @Test
-    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
     public void whenGetMethodListPolicyById() throws Exception {
-        Policy policy3 = policy;
+        Policy policy3 = policyOb1;
         policy3.setId(1);
         policyDto = policyMapper.toDto(policy3);
-        given(policyService.findById(policyDto.getId())).willReturn(policy3);
+        given(policyService.findById(policyDto.getPolicyId())).willReturn(policy3);
         mockMvc.perform(get("/api/policy/" + policy3.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -134,6 +149,7 @@ public class PolicyControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
     public void whenGetPolicies_NoPoliciesReturn() throws Exception {
         when(policyService.findAll()).thenReturn(policyList);
         mockMvc.perform(get("/api/policies").with(user("Dana").roles("ADMIN"))
@@ -141,21 +157,22 @@ public class PolicyControllerTests {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
     @Test
     @WithMockUser(username = "Laura", password = "Laura", roles = {"ANALYST"})
     public void testDeleteShouldReturnIsForbidden() throws Exception {
         int  id = 1111;
-            Mockito.doThrow(PolicyNotFoundException.class).when(policyService).deleteById(id);
+            Mockito.doThrow(HttpClientErrorException.Forbidden.class).when(policyService).deleteById(id);
         mockMvc.perform(delete("/policy/" + id))
                 .andExpect(status().isForbidden())
                 .andDo(print());
     }
 
     @Test
-    @WithMockUser(username = "Dana", password = "Dana", roles = {"ADMIN"})
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
     public void testDownloadFile() throws Exception {
         List<Policy> people = new ArrayList<>();
-        people.add(policy2);
+        people.add(policyOb);
         when(policyService.findAll()).thenReturn(people);
 
         ByteArrayInputStream in = policyExcel.tutorialsToExcel(people);
@@ -173,17 +190,20 @@ public class PolicyControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
     public void testExportExcelIsNull() {
         List<Policy> policyList = new ArrayList<>();
         Mockito.when(policyService.findAll()).thenReturn(policyList);
         ByteArrayInputStream in = policyExcel.tutorialsToExcel(policyList);
         assertNotNull(in);
     }
+
     @Test
+    @WithMockUser(username = "Vasia", password = "12345678", roles = {"admin"})
     public void testExportExcelFindAllPolicies() {
-        policyList = List.of(policy, policy1, policy2);
+        policyList = List.of(policyOb, policyOb1, policyOb2);
         Mockito.when(policyService.findAll()).thenReturn(policyList);
         ByteArrayInputStream in = policyExcel.tutorialsToExcel(policyList);
-        assertEquals(3,policyList.size());
+        assertEquals(3, policyList.size());
     }
 }

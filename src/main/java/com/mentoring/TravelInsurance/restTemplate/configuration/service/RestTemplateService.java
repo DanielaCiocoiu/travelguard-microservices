@@ -22,7 +22,10 @@ public class RestTemplateService {
     private static final String create_or_update_Policy_URL = "http://localhost:8080/api/policy";
     private static final String get_Policy_By_id_URL = "http://localhost:8080/api/policy/{id}";
     private static final String delete_Policy_By_id_URL = "http://localhost:8080/api/policy/{id}";
-    HttpEntity<String> entity = new HttpEntity<>("parameters", createHeaders());
+    private String requestJson = "Vasia" + ":" + "12345678";
+    HttpEntity<String> entity = new HttpEntity<>(requestJson, createHeaders());
+    private static final  String authToken = "tylhtvGM6Duy8q0ZBbGaTg2FZefLfyeEeMZvCXlU2bEiinnZcLSACTxxxxxxxxxx";
+
 
     @Autowired
     public RestTemplateService(RestTemplateRepository restTemplateRepository, RestTemplateBuilder restTemplateBuilder) {
@@ -34,10 +37,7 @@ public class RestTemplateService {
 
     HttpHeaders createHeaders() {
         return new HttpHeaders() {{
-            String auth = "Dana" + ":" + "Dana";
-            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.US_ASCII));
-            String authHeader = "Basic " + new String(encodedAuth);
-            set("Authorization", authHeader);
+            set("Authorization", "Bearer "+authToken);
             setAccept(List.of(MediaType.APPLICATION_JSON));
         }};
     }

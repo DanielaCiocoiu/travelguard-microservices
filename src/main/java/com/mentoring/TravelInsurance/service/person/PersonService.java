@@ -10,11 +10,11 @@ public interface PersonService {
 
     List<Person> findAll();
 
-    Person findById(int theId);
+    Person findById(Integer theId);
 
     Person save(Person person);
 
-    Boolean deleteById(int theId);
+    Boolean deleteById(Integer theId);
 
     Iterable<Person> getPersonsSortedAlphabetically(Sort sort);
 

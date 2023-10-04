@@ -2,7 +2,10 @@ package com.mentoring.TravelInsurance.service;
 
 import com.mentoring.TravelInsurance.controller.Setup;
 import com.mentoring.TravelInsurance.mappers.PersonMapperImpl;
+import com.mentoring.TravelInsurance.model.BenefitAndLimit;
 import com.mentoring.TravelInsurance.model.Person;
+import com.mentoring.TravelInsurance.model.Policy;
+import com.mentoring.TravelInsurance.model.Type;
 import com.mentoring.TravelInsurance.repository.PersonRepository;
 import com.mentoring.TravelInsurance.service.person.PersonServiceIml;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,17 +41,22 @@ public class PersonServiceTests {
     private PersonServiceIml personServiceIml;
     @Mock
     private PersonRepository personRepository;
-
+    private MockMvc mockMvc;
     @SpyBean
     private PersonMapperImpl personMapper;
-    List<Person> personList;
+    private List<Person> personList;
+    private List<Policy> policyList;
     private static Person person, person1, person2;
+    private static Policy policy;
+    private static Policy policyOb;
 
     @BeforeAll
     static void initBeforeAll() {
-        person = Setup.personBuilder("Maria", 22, "romanian");
-        person1 = Setup.personBuilder("Irina", 50, "american");
-        person2 = Setup.personBuilder("Iona", 22, "romanian");
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0,
+                LocalDateTime.of(2022, 1, 1, 0, 0), LocalDateTime.of(2022, 12, 31, 0, 0), List.of());
+        person = Setup.personBuilder("Maria", 22, "romanian", List.of(policyOb));
+        person1 = Setup.personBuilder("Irina", 50, "american", List.of(policyOb));
+        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of(policyOb));
      }
     @BeforeEach
     public void beforeEachTestExecution() {

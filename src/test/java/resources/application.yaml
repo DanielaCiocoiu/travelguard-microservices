@@ -1,4 +1,8 @@
-  jpa:
+spring:
+  profiles:
+    active: "tag_test"
+
+jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -14,15 +18,15 @@
       show-sql: "true"
       ddl-auto: none
 
-  datasource:
+datasource:
     username: sa
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=LEGACY;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     password: sa
-  logging:
+logging:
     level:
       org:
         springframework: info
       web: debug
-  flyway:
+flyway:
     enabled: false

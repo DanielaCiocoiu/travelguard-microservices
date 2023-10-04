@@ -28,14 +28,15 @@ public class PolicyServiceImlAspect {
         logger.info("Method ended at: " + Timestamp.from(Instant.now()));
     }
 
-    @AfterReturning(pointcut = "execution(* com.mentoring.TravelInsurance.service.policy.PolicyServiceIml.findById(..))")
+    @AfterReturning(pointcut = "execution(* com.mentoring.TravelInsurance.service.policy.PolicyServiceIml.*(..))")
     public void afterReturningMethod(JoinPoint joinPoint) {
         logger.info("Target method: " + joinPoint.getSignature() + " has successfully executed returning ");
     }
 
-    @AfterThrowing(pointcut = "execution(* com.mentoring.TravelInsurance.service.policy.PolicyServiceIml.findById(..))",
+    @AfterThrowing(pointcut = "execution(* com.mentoring.TravelInsurance.service.policy.PolicyServiceIml.*(..))",
             throwing = "throwedException")
     public void afterThrowingMethod(JoinPoint joinPoint, Exception throwedException) {
         logger.info("Target method: " + joinPoint.getSignature() + " didn`t executed returning " + throwedException);
     }
+
 }
