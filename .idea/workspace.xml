@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="41356a4b-40d6-48a1-a25e-5f46ffd85a80" name="Changes" comment="Refactoring entire project by creating multi module maven project &#10;Change and extend previous project with Spring Cloud Netflix Eureka&#10;Implement a service registry for service discovery (Eureka Server)&#10;Adapt Policies REST service, which registers itself at the registry (Eureka Client)&#10;Create Rest module which is consuming the REST service as a registry-aware client&#10;Create email module&#10;Refactoring security by moving it in separate module for the entire app.&#10;Implement security at Gateway level&#10;Refactor policy tests&#10;Refactor persons tests&#10;Create tests for Spring Boot — Authentication with JWT and Spring Security">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/easycode/codebase-v2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy-datasource.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/AuthApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/entity/ERole.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/service/jwt/AuthEntryPointJwt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/service/jwt/AuthTokenFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/src/test/java/com/mentoring/AuthApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-model-snapshot.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/jpa-buddy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/java/com/mentoring/EmailApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/java/com/mentoring/config/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/java/com/mentoring/config/EmailControler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/java/com/mentoring/config/EmailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/java/com/mentoring/config/MessageInfoDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/src/main/resources/contact.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/com/mentoring/EmailApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/com/mentoring/config/Config.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/com/mentoring/config/EmailControler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/com/mentoring/config/EmailService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/com/mentoring/config/MessageInfoDto.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/classes/contact.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/email-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/email-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/maven-archiver/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/email/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/src/main/java/com/mentoring/EurekaApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka/src/test/java/com/mentoring/ServiceRegistryApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/GatewayApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/config/AppConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/exception/MissingAuthorizationHeaderException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/exception/UnauthorizedAccessException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/filter/AuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/filter/RouteValidator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/src/test/java/com/mentoring/GatewayApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/Readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/PoliciesApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/aspects/PolicyServiceImlAspect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/config/ProjectConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/controller/PersonController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/controller/PolicyController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/dto/PersonDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/dto/PolicyDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/person/PersonErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/person/PersonNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/person/PersonRestExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/person/PersonWrongAgeException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/policy/PolicyErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/policy/PolicyNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/policy/PolicyRestExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/error/policy/UnauthorizedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/mappers/PersonMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/mappers/PolicyMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/model/BenefitAndLimit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/model/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/model/Policy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/model/Type.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/repository/PersonRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/repository/PolicyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/person/PersonService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/person/PersonServiceIml.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/policy/PolicyExcel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/policy/PolicyService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/policy/PolicyServiceIml.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/Diagram_sql.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/Travel_Insurance_Microservice_stage1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/db/migration/V1__create_policies_persons.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/db/migration/V2__Insert_policies_persons.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/main/resources/spring-boot-authentication-jwt-spring-security-flow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/PoliciesApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/controller/PersonControllerTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/controller/PolicyControllerTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/controller/Setup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/service/PersonServiceTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/com/mentoring/service/PolicyServiceTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/policies/src/test/java/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/HELP.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/RestTemplateApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/config/RestAppConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/controller/RestTemplateController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/exception/NotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/service/RestTemplateRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/service/RestTemplateService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rest/src/test/java/com/mentoring/RestAppApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demo.mv.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/demo.trace.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/TravelInsuranceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/aspects/PolicyServiceImlAspect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/config/ProjectConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/config/WebSecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/controller/PersonController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/controller/PolicyController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/controller/TestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/dto/PersonDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/dto/PolicyDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/person/PersonErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/person/PersonNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/person/PersonRestExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/person/PersonWrongAgeException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/policy/PolicyErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/policy/PolicyNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/policy/PolicyRestExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/error/policy/UnauthorizedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/mappers/PersonMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/mappers/PolicyMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/BenefitAndLimit.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/ERole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/Person.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/Policy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/Type.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/repository/PersonRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/repository/PolicyRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/repository/RoleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/restTemplate/configuration/RestTemplateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/restTemplate/configuration/exception/NotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/restTemplate/configuration/handler/RestTemplateResponseErrorHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/restTemplate/configuration/service/RestTemplateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/restTemplate/configuration/service/RestTemplateService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/jwt/AuthEntryPointJwt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/jwt/AuthTokenFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/jwt/JwtUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/payload/request/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/payload/request/SignupRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/payload/response/JwtResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/payload/response/MessageResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/person/PersonService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/person/PersonServiceIml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/policy/PolicyExcel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/policy/PolicyService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/policy/PolicyServiceIml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/user/UserDetailsImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mentoring/TravelInsurance/service/user/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Diagram_sql.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Travel_Insurance_Microservice_stage1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V1__create _and_Insert_users.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V2__create_policies_persons.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V3__Insert_policies_persons.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/spring-boot-authentication-jwt-spring-security-flow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/TravelInsuranceApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/controller/PersonControllerTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/controller/PolicyControllerTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/controller/Setup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/service/PersonServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/service/PolicySecurityTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/service/PolicyServiceTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/mentoring/TravelInsurance/service/TestRestTemplateBasicLiveTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/resources/application.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/resources/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/resources/schema.sql" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="2WLDdGuuGRi7LJ6zUYWZDPhlGZM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dciocoiu/Downloads/Resurse curs Spring/Travel-Insurance/auth&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.3264368&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.mentoring.controller" />
+      <recent name="com.howtodoinjava.demo.email" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\auth" />
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\email" />
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\eureka" />
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway" />
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\rest" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\auth\src\test\java\com\mentoring\tests" />
+      <recent name="C:\Users\dciocoiu\Downloads\demo" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.mentoring.email" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.mentoring.service" />
+      <recent name="com.mentoring" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.mentoring.service" />
+      <recent name="com.mentoring" />
+      <recent name="com.mentoring.dto" />
+      <recent name="com.mentoring.client" />
+      <recent name="com.mentoring.config" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.PolicySecurityTests">
+    <configuration name="PoliciesApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.PoliciesApplication" />
+      <module name="policies" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PersonControllerTests" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="policies" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mentoring.controller" />
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.controller.PersonControllerTests" />
+      <option name="METHOD_NAME" value="testDeletePerson" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PolicySecurityTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="auth" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mentoring.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.tests.PolicySecurityTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PolicySecurityTests.deletePolicyById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="auth" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mentoring.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.tests.PolicySecurityTests" />
+      <option name="METHOD_NAME" value="deletePolicyById" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PolicySecurityTests.getPolicyById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="auth" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mentoring.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.tests.PolicySecurityTests" />
+      <option name="METHOD_NAME" value="getPolicyById" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PolicySecurityTests.getPolicyByIdNotFound" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="auth" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.mentoring.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.mentoring.tests" />
+      <option name="MAIN_CLASS_NAME" value="com.mentoring.tests.PolicySecurityTests" />
+      <option name="METHOD_NAME" value="getPolicyByIdNotFound" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.PoliciesApplication" />
+      <item itemvalue="JUnit.PersonControllerTests" />
+      <item itemvalue="JUnit.PolicySecurityTests" />
+      <item itemvalue="JUnit.PolicySecurityTests.deletePolicyById" />
+      <item itemvalue="JUnit.PolicySecurityTests.getPolicyById" />
+      <item itemvalue="JUnit.PolicySecurityTests.getPolicyByIdNotFound" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.PolicySecurityTests" />
+        <item itemvalue="Application.PoliciesApplication" />
+        <item itemvalue="JUnit.PolicySecurityTests.deletePolicyById" />
+        <item itemvalue="JUnit.PolicySecurityTests.getPolicyById" />
+        <item itemvalue="JUnit.PolicySecurityTests.getPolicyByIdNotFound" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="41356a4b-40d6-48a1-a25e-5f46ffd85a80" name="Changes" comment="" />
+      <created>1696503054386</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696503054386</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.cmd" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/auth/src/main/java/com/mentoring/config/WebSecurityConfig.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.net.UnknownHostException" package="java.net" />
+          <option name="timeStamp" value="12" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.springframework.cloud.gateway.route.Route" memberName="id" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Travel_Insurance_App$PolicyControllerTests.ic" NAME="PolicyControllerTests Coverage Results" MODIFIED="1698318706886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mentoring.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Travel_Insurance_App$PolicyServiceTests.ic" NAME="PolicyServiceTests Coverage Results" MODIFIED="1698326901274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mentoring.service.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Travel_Insurance_App$PersonServiceTests.ic" NAME="PersonServiceTests Coverage Results" MODIFIED="1698326757134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mentoring.service.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Travel_Insurance_App$PersonControllerTests.ic" NAME="PersonControllerTests Coverage Results" MODIFIED="1698323608087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mentoring.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Travel_Insurance_App$PolicySecurityTests.ic" NAME="PolicySecurityTests Coverage Results" MODIFIED="1698325792640" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.mentoring.*</FILTER>
+    </SUITE>
+  </component>
+</project>

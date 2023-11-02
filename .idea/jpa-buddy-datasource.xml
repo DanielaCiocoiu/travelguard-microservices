@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="c9052fff-4272-400b-b88c-c47505da8d97" name="Travel-Insurance-App" url="jdbc:h2:file:~/h2/Travel-Insurance-App" driverClass="org.h2.Driver" />
+      <data-source id="d460eaff-e9d2-43e2-a193-10bd0f6a43c1" name="demo" url="jdbc:h2:file:./data/demo" driverClass="org.h2.Driver" />
+      <data-source id="802df6a5-9da9-48e7-af2d-34bd89b9e638" name="auth" url="jdbc:h2:file:./data/auth" driverClass="org.h2.Driver" />
+    </data-sources>
+  </component>
+</project>

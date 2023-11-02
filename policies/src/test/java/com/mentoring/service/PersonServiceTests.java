@@ -1,0 +1,114 @@
+package com.mentoring.service;
+
+import com.mentoring.controller.Setup;
+import com.mentoring.model.BenefitAndLimit;
+import com.mentoring.model.Person;
+import com.mentoring.model.Policy;
+import com.mentoring.model.Type;
+import com.mentoring.repository.PersonRepository;
+import com.mentoring.service.person.PersonServiceIml;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class PersonServiceTests {
+    @InjectMocks
+    private PersonServiceIml personServiceIml;
+    @Mock
+    private PersonRepository personRepository;
+
+    private List<Person> personList;
+
+    private static Person person, person1, person2;
+
+    private static Policy policyOb;
+
+    @BeforeAll
+    static void initBeforeAll() {
+        policyOb = Setup.policyBuilder(1, true, Type.MISSIONARY_INSURANCE, BenefitAndLimit.LAISURE_ACTIVITIES, 150.0,
+                LocalDateTime.of(2022, 1, 1, 0, 0), LocalDateTime.of(2022, 12, 31, 0, 0), List.of());
+        person = Setup.personBuilder("Maria", 22, "romanian", List.of(policyOb));
+        person1 = Setup.personBuilder("Irina", 50, "american", List.of(policyOb));
+        person2 = Setup.personBuilder("Iona", 22, "romanian", List.of(policyOb));
+    }
+
+    @BeforeEach
+    public void beforeEachTestExecution() {
+        personList = new ArrayList<>();
+    }
+
+    @Test
+    public void shouldReturnAllPersons() {
+        personList = List.of(person, person1, person2);
+        given(personRepository.findAll()).willReturn(personList);
+        List<Person> expected = personServiceIml.findAll();
+        assertEquals(expected, personList);
+        verify(personRepository, times(1)).findAll();
+    }
+
+    @Test
+    void whenGetAllPersonsReturnEmptyList() {
+        lenient().when(personRepository.findAll()).thenReturn(personList);
+        assertThat(personServiceIml.findAll()).isEqualTo(personList);
+        verify(personRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void whenSavePerson_shouldReturnPerson() {
+        Person person = person1;
+        when(personRepository.save(ArgumentMatchers.any(Person.class))).thenReturn(person);
+        Person created = personServiceIml.save(person);
+        assertThat(created.getId()).isSameAs(person.getId());
+        verify(personRepository).save(person);
+    }
+
+    @Test
+    public void whenGivenId_shouldDeletePerson_ifFound() {
+        var person = person2;
+        person.setId(2);
+        lenient().when(personRepository.findById(person.getId())).thenReturn(Optional.of(person));
+        personServiceIml.deleteById(person.getId());
+        verify(personRepository).findById(person.getId());
+    }
+
+    @Test
+    public void whenUpdatePerson_shouldUpdatePerson_ifFound() {
+        var person = person1;
+        person.setId(2);
+        lenient().when(personRepository.findById(person.getId())).thenReturn(Optional.of(person));
+        personServiceIml.save(person);
+        verify(personRepository).save(person);
+    }
+
+    @Test
+    public void testGetPersonsInPages() {
+        Pageable pageable = PageRequest.of(0, 10);
+        personList = List.of(person, person1, person2);
+        Page<Person> page = new PageImpl<>(personList, pageable, personList.size());
+        Mockito.when(personRepository.findAll(pageable)).thenReturn(page);
+        Iterable<Person> result = personServiceIml.getPersonsInPages(pageable);
+        assertNotNull(result);
+    }
+}
