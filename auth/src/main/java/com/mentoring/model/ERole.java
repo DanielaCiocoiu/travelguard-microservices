@@ -1,4 +1,4 @@
-package com.mentoring.entity;
+package com.mentoring.model;
 
 public enum ERole {
   ROLE_USER,

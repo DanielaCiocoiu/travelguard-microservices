@@ -1,15 +1,15 @@
 package com.mentoring.controller;
 
-import com.mentoring.entity.ERole;
-import com.mentoring.entity.Role;
-import com.mentoring.entity.User;
+import com.mentoring.model.ERole;
+import com.mentoring.model.Role;
+import com.mentoring.model.User;
+import com.mentoring.payload.request.LoginRequest;
+import com.mentoring.payload.request.SignupRequest;
+import com.mentoring.payload.response.JwtResponse;
+import com.mentoring.payload.response.MessageResponse;
 import com.mentoring.repository.RoleRepository;
 import com.mentoring.repository.UserRepository;
 import com.mentoring.service.jwt.JwtUtils;
-import com.mentoring.service.payload.request.LoginRequest;
-import com.mentoring.service.payload.request.SignupRequest;
-import com.mentoring.service.payload.response.JwtResponse;
-import com.mentoring.service.payload.response.MessageResponse;
 import com.mentoring.service.user.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,8 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
+        User user = new User(
+                signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 bCryptPasswordEncoder.encode(signUpRequest.getPassword()));
 

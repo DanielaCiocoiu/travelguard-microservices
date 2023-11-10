@@ -22,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,7 +79,7 @@ public class PolicyController {
     }
 
     @Operation(summary = "Create a policy")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/policy")
     public ResponseEntity<PolicyDto> addPolicy(@Valid @RequestBody PolicyDto policyDto) {
         policyDto.setPolicyId(0);
@@ -93,7 +92,7 @@ public class PolicyController {
 
     @Operation(summary = "Update a policy")
     @PutMapping("/policy")
-    @Secured("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public PolicyDto savePolicy(@RequestBody PolicyDto policyDto) {
         Policy policyToBeSaved = policyMapper.toEntity(policyDto);
@@ -142,7 +141,7 @@ public class PolicyController {
     }
 
     //http://localhost:8082/api/policy/9/250
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/policy/{id}/{price}")
     public ResponseEntity<Policy> updatePolicyPrice(@PathVariable int id, @PathVariable Double price) {
         var thePolicy = policyService.findAll()
