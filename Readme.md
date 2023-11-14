@@ -1,8 +1,19 @@
 Travel-insurance application
 
-Travel_Insurance it is a REST API which exposes endpoints for each use case, using  Spring Boot,  
+Travel_Insurance is a multi modules project based on Eureka Gateway Registry, based on Spring Cloud Netflix – Eureka 
+which exposes endpoints for each use case, using  Spring Boot,  
 a microservice that handle CRUD operations for managing Travel Insurance policies. 
-The project it is set up with Maven, Java 17, Spring Boot 3.1.2., Flyway Community Edition 9, Swagger.
+Modules:
+
+<module>policies</module> REST services exposes endpoints for each use case, using  Spring Boot,  
+a microservice that handle CRUD operations for managing Travel Insurance policies
+<module>email</module>
+<module>gateway</module> - request gateway interceptor 
+<module>auth</module> - security module
+<module>eureka</module> - services registry
+<module>rest</module> - Rest client
+
+The project it is set up with Maven, Java 17, Spring Boot 3.1.2., Flyway Community Edition 9, Swagger, Mongo Db, Eureka Gateway.
 Microservice is based on policy model which has following: id, eligibility, validity, type, benefitAndLimit, price and a list of persons. 
 Type and benefits are enums:
 BenefitAndLimit 
@@ -109,33 +120,27 @@ SecurityConfig implement with Spring Boot JWT Authentication
 User can signup new account, or login with username & password.
 By User’s role (admin, moderator, user), we authorize the User to access resources
 
-INSERT INTO roles(name) VALUES('ROLE_USER');
-INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
-INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+Security module use mongoDb connection and database
 
-INSERT INTO users(username,email,password) VALUES('john', 'john@gmail.com','12345678');
-INSERT INTO users(username,email,password) VALUES('mary', 'mary@gmail.com','12345678');
-INSERT INTO users(username,email,password) VALUES('susan', 'susan@gmail.com','12345678');
+db.roles.insertMany([
+{ name: "ROLE_USER" },
+{ name: "ROLE_MODERATOR" },
+{ name: "ROLE_ADMIN" },
+])
+
+db.users.insertMany([
+{ username: "Vasia", email: "Vasia@gmail.com", password: "12345678" },
+{ username: "Ina", email: "Ina@gmail.com", password: "12345678" },
+{ username: "Maia", email: "Maia@gmail.com", password: "12345678" },
+])
 
 POST: http://localhost:8082/api/auth/signup
 {
-"username": "Vasia",
-"email": "Vasia@gmail.com",
-"password": "12345678",
+"username": "Irina",
+"email": "Irina@gmail.com",
+"password": "Ma@@word123&*",
+"confirmPassword": "Ma@@word123&*",
 "role": ["admin"]
-}
-
-{
-"username": "Tom",
-"password": "12345678",
-"email": "Tom@gmail.com",
-"role": ["moderator"]
-}
-{
-"username": "Livia",
-"password": "12345678",
-"email": "Livia@gmail.com",
-"role": ["user"]
 }
 
 GET: http://localhost:8082/api/test/all
@@ -144,24 +149,20 @@ GET: http://localhost:8082/api/test/user
 
 POST: http://localhost:8082/api/auth/signin
 {
-"username": "Vasia",
-"password": "12345678"
+"username": "Irina",
+"password": "Ma@@word123&*"
 }
                         Response
 {
-"id": 1,
-"username": "Vasia",
-"email": "Vasia@gmail.com",
+"id": "65532ff56d3b647f09d4a131",
+"username": "Irina",
+"email": "Irina@gmail.com",
 "roles": [
 "ROLE_ADMIN"
 ],
-"tokenType": "Bearer",
-"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJWYXNpYSIsImlhdCI6MTY5NTI4MjIwOSwiZXhwIjoxNjk1MzY4NjA5fQ.IgyrMsIz3zgttouHP7FGVYJM3ILA_S7_NHEQzG-_MvM"
+"accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJpc0FkbWluIjp0cnVlLCJzdWIiOiJJcmluYSIsImlhdCI6MTY5OTk1MzUwMCwiZXhwIjoxNjk5OTU1MzAwfQ.QdSD97piiyTBTJDp1hxKhT7TcZ0k2vpiOf58byz8T7Y",
+"tokenType": "Bearer"
 }
 GET: http://localhost:8082/api/test/user with Bearer token.... 
 
 
-Eureka: http://localhost:8761/
-Eureka server application and it is a spring cloud managed service. 
-Therefore it has the similar nature as other microservices. In microservice architecture, every microservice(spring 
-cloud service) should be registered themselves with Eureka server to make them discoverable (through Eureka server).

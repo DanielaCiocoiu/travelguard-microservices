@@ -6,8 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -15,7 +13,6 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     private Key key;
@@ -38,7 +35,6 @@ public class JwtUtil {
             throw new PermissionException("token is error, please check");
         }
     }
-
 
     private boolean isTokenExpired(String token) {
         return this.getAllClaimsFromToken(token).getExpiration().before(new Date());
