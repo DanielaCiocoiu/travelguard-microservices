@@ -17,14 +17,15 @@ public class RestTemplateService {
 
 
     @Autowired
-    private PoliciesServiceClient policiesServiceClient;
+    private final PoliciesServiceClient policiesServiceClient;
 
     @Autowired
-    public RestTemplateService(RestTemplateRepository restTemplateRepository, RestTemplateBuilder restTemplateBuilder) {
+    public RestTemplateService(RestTemplateRepository restTemplateRepository, RestTemplateBuilder restTemplateBuilder, PoliciesServiceClient policiesServiceClient) {
         this.restTemplateRepository = restTemplateRepository;
         restTemplate = restTemplateBuilder
                 .errorHandler(new NotFoundException.RestTemplateResponseErrorHandler())
                 .build();
+        this.policiesServiceClient = policiesServiceClient;
     }
 
     public List<PolicyDto> allListPolicies() {

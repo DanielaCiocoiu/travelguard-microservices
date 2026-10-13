@@ -4,22 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41356a4b-40d6-48a1-a25e-5f46ffd85a80" name="Changes" comment="Refactoring H2 DB connection for Auth security module to MongoDb&#10;Insert gitignore files&#10;Refactoring moving some file in other location folder">
-      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/validation/PasswordMatching.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/validation/PasswordMatchingValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/validation/StrongPassword.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/validation/StrongPasswordValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/validation/ValidationExceptionHandler.java" afterDir="false" />
+    <list default="true" id="41356a4b-40d6-48a1-a25e-5f46ffd85a80" name="Changes" comment="Custom validation for sing in using @StrongPassword and @PasswordMatching">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/payload/request/SignupRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/java/com/mentoring/payload/request/SignupRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-model-snapshot.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/email/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/email/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/filter/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/filter/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/src/main/java/com/mentoring/util/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/policies/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/policies/target/generated-sources/annotations/com/mentoring/mappers/PersonMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/policies/target/generated-sources/annotations/com/mentoring/mappers/PersonMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/policies/target/generated-sources/annotations/com/mentoring/mappers/PolicyMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/policies/target/generated-sources/annotations/com/mentoring/mappers/PolicyMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/policy/PolicyServiceIml.java" beforeDir="false" afterPath="$PROJECT_DIR$/policies/src/main/java/com/mentoring/service/policy/PolicyServiceIml.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/service/RestTemplateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rest/src/main/java/com/mentoring/service/RestTemplateService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,20 +59,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "C:/Users/dciocoiu/Downloads/Resurse curs Spring/Travel-Insurance/auth",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.3264368",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dciocoiu/Downloads/Resurse curs Spring/Travel-Insurance/auth&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.3264368&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.mentoring.controller" />
@@ -240,7 +228,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699626369335</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Custom validation for sing in using @StrongPassword and @PasswordMatching">
+      <created>1699958958274</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1699958958274</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -261,7 +256,8 @@
     <MESSAGE value="Refactoring entire project by creating multi module maven project &#10;Refactoring Database from Policy Module Auth Module &#10;Change and extend previous project with Spring Cloud Netflix Eureka&#10;Implement a service registry for service discovery (Eureka Server)&#10;Adapt Policies REST service, which registers itself at the registry (Eureka Client)&#10;Create Rest module which is consuming the REST service as a registry-aware client&#10;Create email module&#10;Refactoring security by moving it in separate module for the entire app.&#10;Implement security at Gateway level&#10;Refactor policy tests&#10;Refactor persons tests&#10;Create tests for Spring Boot — Authentication with JWT and Spring Security" />
     <MESSAGE value="Refactoring H2 DB connection for Auth security module to mongoDb&#10;Insert gitignore files&#10;Refactoring moving some file in other location folder" />
     <MESSAGE value="Refactoring H2 DB connection for Auth security module to MongoDb&#10;Insert gitignore files&#10;Refactoring moving some file in other location folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring H2 DB connection for Auth security module to MongoDb&#10;Insert gitignore files&#10;Refactoring moving some file in other location folder" />
+    <MESSAGE value="Custom validation for sing in using @StrongPassword and @PasswordMatching" />
+    <option name="LAST_COMMIT_MESSAGE" value="Custom validation for sing in using @StrongPassword and @PasswordMatching" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

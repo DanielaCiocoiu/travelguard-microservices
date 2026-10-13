@@ -1,0 +1,10 @@
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\exception\UnauthorizedAccessException.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\filter\AuthenticationFilter.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\config\LoggingGlobalPreFilter.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\config\GatewayConfig.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\exception\MissingAuthorizationHeaderException.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\GatewayApplication.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\config\AppConfig.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\util\JwtUtil.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\exception\PermissionException.java
+C:\Users\dciocoiu\Downloads\Resurse curs Spring\Travel-Insurance\gateway\src\main\java\com\mentoring\filter\RouteValidator.java

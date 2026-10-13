@@ -108,12 +108,16 @@ public class PolicyServiceIml implements PolicyService {
     public Map<Integer, Map<LocalDate, Integer>> getNumberOfPoliciesMadeByEachPersonEachMonthInGivenTimeInterval(
             LocalDate firstDate,
             LocalDate lastDate) {
-        List<PolicyDto> listOfPoliciesFilteredByGivenDate = policyRepository.findAll().stream()
-                .map(policyMapper::toDto)
-                .filter(policy -> policy.getIssueDate().toLocalDate().isAfter(firstDate)
+        List<PolicyDto> listOfPoliciesFilteredByGivenDate =
+                policyRepository
+                        .findAll()
+                        .stream()
+                        .map(policyMapper::toDto)
+                        .filter(policy -> policy.getIssueDate().toLocalDate().isAfter(firstDate)
                         && policy.getIssueDate().toLocalDate().isBefore(lastDate)).toList();
 
-        Map<Integer, List<PolicyDto>> mapOfPolicyGroupByPerson = listOfPoliciesFilteredByGivenDate.stream()
+        Map<Integer, List<PolicyDto>> mapOfPolicyGroupByPerson = listOfPoliciesFilteredByGivenDate
+                .stream()
                 .collect(Collectors.groupingBy(PolicyDto::getPersonId));
 
         Map<Integer, List<LocalDate>> mapOfLocalDatesByPerson = new HashMap<>();

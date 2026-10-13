@@ -1,0 +1,12 @@
+com\mentoring\dto\PolicyDto.class
+com\mentoring\service\RestTemplateRepository.class
+com\mentoring\service\RestTemplateService.class
+com\mentoring\client\PoliciesServiceClient.class
+com\mentoring\config\RestAppConfig.class
+com\mentoring\dto\PersonDto.class
+com\mentoring\client\PoliciesServiceClient$2.class
+com\mentoring\RestTemplateApplication.class
+com\mentoring\controller\RestTemplateController.class
+com\mentoring\exception\NotFoundException$RestTemplateResponseErrorHandler.class
+com\mentoring\client\PoliciesServiceClient$1.class
+com\mentoring\exception\NotFoundException.class

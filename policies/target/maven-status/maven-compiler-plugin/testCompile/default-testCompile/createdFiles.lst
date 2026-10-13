@@ -1,0 +1,6 @@
+com\mentoring\controller\PersonControllerTests.class
+com\mentoring\PoliciesApplicationTests.class
+com\mentoring\service\PolicyServiceTests.class
+com\mentoring\controller\PolicyControllerTests.class
+com\mentoring\service\PersonServiceTests.class
+com\mentoring\controller\Setup.class
