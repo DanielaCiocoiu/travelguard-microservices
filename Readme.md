@@ -1,4 +1,4 @@
-# Travel Insurance Microservices
+# TravelGuard Microservices
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17" />
@@ -8,30 +8,30 @@
   <img src="https://img.shields.io/badge/Maven-Multi-module-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven" />
 </p>
 
-A multi-module Spring Boot microservices project for travel insurance management, built around policy processing, API gateway routing, service discovery, JWT authentication, and backend integration services.
+A multi-module Java microservices platform for managing travel insurance policies, user authentication, email processing, and service-to-service communication in a Spring Cloud ecosystem.
 
 ## Overview
 
-This repository demonstrates a hands-on microservices architecture for a travel insurance domain. It includes:
+TravelGuard is a portfolio-ready microservices project designed to showcase real-world Java backend engineering practices. It includes:
 
-- a business service for insurance policies and insured persons
-- client-side REST consumption via `rest`
-- secure authentication and authorization via `auth`
-- central service registration with `eureka`
-- request routing through `gateway`
-- email-related processing through `email`
+- policy management and validation for travel insurance entities
+- API gateway routing and request orchestration
+- service discovery and registration through Eureka
+- JWT-based authentication and role authorization
+- asynchronous/integration workflows for email operations
+- REST client consumption for internal service communication
 
-The solution uses Java 17, Spring Boot 3.0.x, Spring Cloud, JPA, Flyway, H2, MongoDB, and JWT-based security.
+The platform is built with Java 17, Spring Boot 3.0.x, Spring Cloud, JPA, Flyway, H2, MongoDB, and JWT-based security.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
     Client[Client / Postman / Swagger UI] --> Gateway[Gateway\nSpring Cloud Gateway]
-    Gateway --> Policy[policies\nPolicy Service]
-    Gateway --> Auth[auth\nJWT Auth Service]
-    Gateway --> Email[email\nEmail Service]
-    Gateway --> Rest[rest\nREST Client Service]
+    Gateway --> Policy[Policy Service\npolicies]
+    Gateway --> Auth[Auth Service\nauth]
+    Gateway --> Email[Email Service\nemail]
+    Gateway --> Rest[REST Consumer\nrest]
 
     Policy --> DB[(H2 / Relational DB)]
     Policy --> Flyway[Flyway Migrations]
@@ -47,22 +47,22 @@ flowchart LR
 
 ## Module Responsibilities
 
-| Module | Responsibility | Port / Role |
+| Module | Responsibility | Notes |
 | --- | --- | --- |
-| `policies` | Policy and person CRUD, validation, business rules | Business logic service |
-| `auth` | User registration, login, JWT generation, role-based access | Security service |
-| `gateway` | API routing, request forwarding, centralized entry point | Gateway |
-| `eureka` | Service discovery and registration | Registry server |
-| `email` | Email processing and notification workflows | Integration service |
-| `rest` | REST client for consuming APIs from other modules | Consumer service |
+| `policies` | Business logic for policies and insured persons | Main domain service |
+| `auth` | Signup, signin, JWT generation, role-based access | MongoDB-backed |
+| `gateway` | Request routing and API entry point | Spring Cloud Gateway |
+| `eureka` | Service registration and discovery | Spring Cloud Netflix Eureka |
+| `email` | Notification and email integration logic | External integration |
+| `rest` | REST client for internal API calls | Client-side integration |
 
 ## Runtime Stack
 
 - Java 17
 - Maven multi-module build
 - Spring Boot 3.0.4
-- Spring Cloud Netflix Eureka
 - Spring Cloud Gateway
+- Spring Cloud Netflix Eureka
 - Spring Security
 - JWT
 - JPA / Hibernate
@@ -76,7 +76,7 @@ flowchart LR
 ## Project Structure
 
 ```text
-Travel-Insurance/
+travelguard-microservices/
 ├── pom.xml
 ├── Readme.md
 ├── .gitignore
@@ -104,27 +104,25 @@ Travel-Insurance/
 
 ## Prerequisites
 
-Before starting the services, install and verify the following:
+Before starting the services, make sure you have:
 
-- Java 17 or later
+- Java 17+
 - Maven 3.8+
-- MongoDB running locally or in Docker
-- H2 available through the app configuration for local development
+- MongoDB running locally or via Docker
+- H2 available through application configuration for local development
 - IDE such as IntelliJ IDEA or VS Code
 
-## Environment Configuration
+## Quick Start
 
-The project is organized as a multi-service application. Typical local setup includes:
-
-- `eureka` service registry
-- `gateway` entrypoint for routed HTTP requests
-- `auth` service using MongoDB for credentials and roles
-- `policies` service using JPA/Hibernate + Flyway
-
-If you are using the default local configuration, the services are expected to be started in the following order:
+From the project root:
 
 ```bash
 mvn clean install
+```
+
+Start the services in the recommended order:
+
+```bash
 mvn spring-boot:run -pl eureka
 mvn spring-boot:run -pl auth
 mvn spring-boot:run -pl policies
@@ -132,13 +130,11 @@ mvn spring-boot:run -pl gateway
 mvn spring-boot:run -pl email
 ```
 
-You can also run the submodules individually using their local Maven wrappers (`mvnw`) where available.
-
 ## Core Domain Model
 
 ### Policy
 
-The main business object is `Policy` with the following fields:
+The central domain object is `Policy`, containing:
 
 - `id`
 - `eligibility`
@@ -148,7 +144,7 @@ The main business object is `Policy` with the following fields:
 - `price`
 - `personList`
 
-Enum examples:
+Example enums:
 
 ```java
 BenefitAndLimit:
@@ -171,14 +167,14 @@ Type:
 
 ### Person
 
-The `Person` model typically contains:
+`Person` contains:
 
 - `id`
 - `name`
 - `age`
 - `nationality`
 
-Validation rules used in the project:
+Validation annotations used in the project:
 
 ```java
 @NotBlank
@@ -192,11 +188,11 @@ Validation rules used in the project:
 ## Persistence Design
 
 - `policies` uses Spring Data JPA and Hibernate
-- relational data is stored in H2 for local development
-- Flyway is used for schema versioning and migration tracking
+- local persistence is backed by H2
+- Flyway manages database schemas and versioning
 - a one-to-many unidirectional mapping is used between `Policy` and `Person`
 
-## Endpoint Overview
+## API Overview
 
 ### Policy Endpoints
 
@@ -226,7 +222,7 @@ Validation rules used in the project:
 | `GET` | Get persons by page | `localhost:8082/api/persons/page` |
 | `GET` | Get persons by nationality | `localhost:8082/api/nationality/american` |
 
-### RestTemplate Consumer Endpoints
+### REST Client Endpoints
 
 | Method | Description | Example |
 | --- | --- | --- |
@@ -236,7 +232,7 @@ Validation rules used in the project:
 | `PUT` | Update policy | `localhost:8082/RestTemplate/updatePolicy` |
 | `DELETE` | Delete policy | `localhost:8082/RestTemplate/deletePolicy/1` |
 
-## Example Request Body
+## Example Policy Payload
 
 ```json
 {
@@ -259,7 +255,7 @@ Validation rules used in the project:
 
 ## Security Model
 
-The application implements JWT-based authentication and a role-based access model.
+The project implements JWT-based authentication and authorization with role-based access control.
 
 ### Supported Roles
 
@@ -267,29 +263,23 @@ The application implements JWT-based authentication and a role-based access mode
 - `ROLE_MODERATOR`
 - `ROLE_ADMIN`
 
-### Auth Service Behavior
+### Auth Flow
 
-- user sign-up
-- user sign-in
-- JWT token generation
-- role-based endpoint authorization
-- password validation / confirmation flow
+- sign up user
+- sign in user
+- validate credentials
+- generate JWT token
+- authorize protected endpoints based on roles
 
-The `auth` module uses MongoDB to store user data and roles.
+MongoDB is used for persistence of users and roles.
 
-### MongoDB Seed Examples
+### Create Role Example
 
 ```javascript
 db.roles.insertMany([
   { name: "ROLE_USER" },
   { name: "ROLE_MODERATOR" },
   { name: "ROLE_ADMIN" }
-])
-
-db.users.insertMany([
-  { username: "Vasia", email: "Vasia@gmail.com", password: "12345678" },
-  { username: "Ina", email: "Ina@gmail.com", password: "12345678" },
-  { username: "Maia", email: "Maia@gmail.com", password: "12345678" }
 ])
 ```
 
@@ -339,7 +329,7 @@ Content-Type: application/json
 }
 ```
 
-### Protected Endpoint Usage
+### Protected Endpoint Example
 
 ```http
 GET http://localhost:8082/api/test/all
@@ -349,15 +339,15 @@ Authorization: Bearer <token>
 
 ## Development Notes
 
-- Use `MapStruct` for DTO-to-entity mapping
-- Use Spring AOP for cross-cutting concerns and method-level interception
-- Use global exception handlers for clean domain error responses
-- Swagger/OpenAPI is available for API exploration and testing
-- The project is structured to demonstrate microservice communication and modular separation of concerns
+- Spring AOP is used for cross-cutting concerns around service methods
+- DTO mappings are handled through MapStruct
+- Global exception handlers are implemented for clean API responses
+- Swagger / OpenAPI is available for live API exploration
+- The solution demonstrates modular microservice design with discovery, routing, and security separation
 
 ## Screenshot Section
 
-Below is a placeholder section for adding screenshots relevant to the project.
+This is the recommended area to add visuals for your portfolio.
 
 ### Architecture Overview
 
@@ -383,7 +373,7 @@ Add screenshot here: docs/images/eureka-dashboard.png
 
 ![Eureka Dashboard](docs/images/eureka-dashboard.png)
 
-### Auth Flow / API Testing
+### Auth Flow
 
 ```text
 Add screenshot here: docs/images/auth-flow.png
@@ -391,16 +381,16 @@ Add screenshot here: docs/images/auth-flow.png
 
 ![Auth Flow](docs/images/auth-flow.png)
 
-## Recommended Next Steps
+## Recommended Enhancements
 
-- add Docker Compose for local orchestration
-- configure centralized configuration server
-- add integration tests for `policies` and `auth`
-- add CI/CD pipeline with Maven and test reports
-- add observability with Actuator, Prometheus, and Grafana
+- add Docker Compose for local environment startup
+- add a centralized configuration server
+- add integration tests for auth and policy services
+- add CI/CD pipeline with Maven and test reporting
+- add Actuator + Prometheus + Grafana for observability
 
 ## License
 
-This project is intended for learning, training, and demonstration purposes.
+This project is intended for learning, demonstration, and portfolio use.
 
 

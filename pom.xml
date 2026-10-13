@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mentoring</groupId>
-    <artifactId>Travel-Insurance</artifactId>
+    <artifactId>travelguard-microservices</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Travel-Insurance</name>
-    <description>Demo project for Spring Boot</description>
+    <name>travelguard-microservices</name>
+    <description>Travel insurance microservices platform built with Spring Boot and Spring Cloud</description>
 
 
     <modules>
